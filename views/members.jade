@@ -1,0 +1,32 @@
+extends main_layout
+
+block append head
+  title Harp Editor - Members
+
+block body
+  include _shared/nav
+
+
+  .container(style="margin-top:15px;")
+    .row.hb-status-bar
+      .col-sm-9.hb-status-col
+        span Viewing all 
+        b Members
+      .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+        a(href="/admin/member/new")
+          i.fa.fa-plus.fa-fw(style="margin-right:6px")
+          span New Member
+    .row
+      .col-sm-12
+        ul.hb-content
+          - for(var i = 0; i < members.length; i++)
+            li
+              .row
+                .col-sm-11
+                  .hb-content-item
+                    a(href="#") #{members[i].first_name} #{members[i].last_name}
+                .col-sm-1
+                  .hb-view
+                    a(href="#") 
+                      i.fa.fa-times.fa-fw.hb-muted
+

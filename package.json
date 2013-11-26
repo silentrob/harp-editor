@@ -1,0 +1,24 @@
+{
+  "name": "harp-cms",
+  "version": "0.0.0",
+  "description": "A CMS built on top of Harp web server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "harp":"*",
+    "jade": "0.35.0",
+    "ejs":"*",
+    "express":"*",
+    "commander":"*",
+    "connect-busboy":"*",
+    "connect-flash":"*",
+    "walk":"*",
+    "underscore":"*"
+  },
+  "repository": "",
+  "author": "Rob Ellis",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}

@@ -1,0 +1,9 @@
+nav.navbar.navbar-default(role="navigation")
+	ul.nav.navbar-nav(style="padding:0px 20px;border-right:1px solid #ccc")
+		li
+			a(href="/admin/content") Pages
+
+	ul.nav.navbar-nav
+		- for(var i = 0; i < Object.keys(sections).length;i++) 
+			li(style="padding:0px 0px 0px 20px")
+				a(href="/admin/lists/#{Object.keys(sections)[i]}")= toUpperCase(Object.keys(sections)[i])

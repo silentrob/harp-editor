@@ -1,0 +1,31 @@
+extends main_layout
+
+block append head
+  title Harp Editor - Settings
+
+block body
+  include _shared/nav
+
+  .container
+    .row
+      h1 Site Settings
+
+    - if (message)
+      .row
+        .col-sm-12
+          p= message
+
+
+      form(action="/admin/settings", method="post")
+        each title, key in settings.globals
+
+          .row
+            .col-sm-12
+              .form-group
+                label= keyToTitle(key)
+                input.form-control(name="#{key}", value="#{settings.globals[key]}")
+
+
+        .row
+          .col-sm-12
+            button.btn.btn-primary.pull-right Save Settings

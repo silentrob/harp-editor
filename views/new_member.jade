@@ -1,0 +1,51 @@
+extends main_layout
+
+block append head
+  title Harp Editor - New Member
+
+block body
+  include _shared/nav
+
+  .container
+    .row.hb-status-bar(style="margin-top:15px;")
+      .col-sm-9.hb-status-col
+        span Create New Member
+      .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+        a(href="#")
+          span save
+
+  .container
+    .row
+      .col-sm-12
+        form(action="/admin/member/new", method="post")
+
+          .form-group
+            label Username
+            input.form-control(type="text", name="username" placeholder="Username")
+
+          .form-group
+            label Email
+            input.form-control(type="email", name="email" placeholder="Email")
+
+          .form-group
+            label First Name
+            input.form-control(type="text", name="first_name" placeholder="First Name")
+
+          .form-group
+            label Last Name
+            input.form-control(type="text", name="last_name" placeholder="Last Name")
+            
+          .form-group
+            label Password
+            input.form-control(type="password", name="password1" placeholder="Password")
+
+          .form-group
+            label Password Confirmation
+            input.form-control(type="password", name="password2" placeholder="Password")              
+
+          .checkbox
+            label
+              input(type="checkbox") 
+              | Admin
+
+          button.btn.btn-primary.pull-right Save 

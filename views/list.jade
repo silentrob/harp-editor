@@ -1,0 +1,33 @@
+extends main_layout
+
+block append head
+  title Harp Editor - List
+
+block body
+  include _shared/nav
+  include _shared/content_nav
+
+  .container(style="margin-top:15px;")
+    .row.hb-status-bar
+      .col-sm-9.hb-status-col
+        span Viewing list 
+        b= list
+      .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+        a(href="#")
+          i.fa.fa-plus.fa-fw(style="margin-right:6px")
+          a(href="/admin/list/new") New Entry
+
+    .row
+      table.hb-table.table.table-hover
+        thead
+          tr
+            th Title
+            th Date 
+            th View
+        each obj, dataKey in metaData
+          tr
+            td: a(href="/admin/publish?path=")= listTitle(dataKey, obj)
+            td= obj.date 
+            td
+              a(href="#{listRoot}/#{link(dataKey)}") 
+                i.fa.fa-link.fa-fw.hb-muted

@@ -1,0 +1,30 @@
+nav.hb-navbar.navbar.navbar-default.navbar-static-top(role="navigation")
+  .navbar-header
+    button(type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
+      span.sr-only Toggle navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    a.hb-brand.navbar-brand(href="/admin/content") Harp Editor
+
+
+  #bs-example-navbar-collapse-1.collapse.navbar-collapse
+    ul.nav.navbar-nav
+      li.active: a(href="/admin/content")
+        i.fa.fa-file.fa-fw(style="margin-right:6px;") 
+        | Content
+      li: a(href="/admin/members") 
+        i.fa.fa-users.fa-fw(style="margin-right:6px;") 
+        | Members
+      li: a(href="/admin/settings") 
+        i.fa.fa-cog.fa-fw(style="margin-right:6px;") 
+        | Settings
+      
+
+    ul.nav.navbar-nav.pull-right
+      li: a(href="/") 
+        i.fa.fa-share-square-o.fa-fw(style="margin-right:6px;") 
+        | View Site
+      li: a(href="/admin/logout") 
+        i.fa.fa-sign-out.fa-fw(style="margin-right:6px;") 
+        | Logout

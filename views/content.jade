@@ -1,0 +1,43 @@
+extends main_layout
+
+block append head
+  title Harp Editor - Contents
+
+block body
+  include _shared/nav
+  include _shared/content_nav
+
+  .container(style="margin-top:15px;")
+    .row.hb-status-bar
+      .col-sm-9.hb-status-col
+        span Viewing all 
+        b Site Pages
+      .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+        a(href="#")
+          i.fa.fa-plus.fa-fw(style="margin-right:6px")
+          a(href="/admin/content/new?path=/") New Top Level Page         
+
+    .row
+      .col-sm-12
+        ul.hb-content
+          each file, k in files
+            - if (!isHidden(files[k]))
+              li
+                .row
+                  .col-md-10
+                    .hb-content-item
+                      a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
+                      small.pull-right.hb-muted= files[k]
+                  .col-md-1
+                    .hb-view
+                      form(method="post", action="/admin/content")
+                        input(type="hidden", name="_method", value="delete")
+                        input(type="hidden", name="file", value="#{files[k]}")
+
+                        button.btn.btn-danger
+                          i.fa.fa-times.fa-fw.hb-muted                    
+                  .col-md-1
+                    - if (!isHidden(files[k]))
+                      .hb-view
+                        a(href="#{link(files[k])}") 
+                          i.fa.fa-link.fa-fw.hb-muted

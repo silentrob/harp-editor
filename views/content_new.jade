@@ -1,0 +1,52 @@
+extends main_layout
+
+block append head
+  title Harp Editor - New File
+
+block body
+  include _shared/nav
+
+  .container(style="margin-top:15px;")
+    .row.hb-status-bar
+      .col-sm-9.hb-status-col
+        span New Page 
+        b= link(path)
+      .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+        a(href="#")
+          i.fa.fa-plus.fa-fw(style="margin-right:6px")
+          span Save Page
+
+     - if (message)
+        .row
+          .col-sm-12
+            p= message
+ 
+
+    form.container(action="/admin/content/new", method="post")
+
+      input(type="hidden", name="path", value="#{path}")
+      .row
+        .col-sm-12
+          .form-group
+            label Title
+            input.form-control(name="title", value="")
+
+      .row
+        .col-sm-12
+          .form-group
+            label Layout
+            select(name="layout").form-control
+              each layout, key in layouts
+                option(value="#{layout.value}")= layout.name
+      .row
+        .col-sm-12
+          .form-group
+            label Slug
+            input.form-control(name="slug", value="")
+
+      .row
+        .col-sm-12
+          .form-group
+            label Page Content
+            textarea.form-control(name="content", rows="24",style="white-space: pre-wrap")
+          button.btn.btn-primary.pull-right Save 

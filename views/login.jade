@@ -1,0 +1,23 @@
+extends main_layout
+
+block append head
+  title Harp Editor - Sign In
+
+block body
+  .container.form-signin
+
+    .row
+      .col-sm-12.logo
+        img(src="/editor/img/harp-emblem_circle_concentric_bw-500.png",width="70px")
+
+    - if (message)
+      .row
+        .col-sm-12
+          p= message
+          
+    .row
+      .col-sm-12
+        form(action="/admin/login",method="post")
+          input.form-control(type='text', name="username", placeholder='Username', required='required', autofocus='autofocus')
+          input.form-control(type='password', name="password", placeholder='Password', required='required')
+          button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
