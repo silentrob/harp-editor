@@ -3,17 +3,18 @@
 Adds ACL and other niceities to Harp Boilerplates.
 Built on top of Harp web server and uses best practices.
 
-$ harp-editor 
+# This is a PREVIEW - PRE-ALPHA 
+Note the version is 0.0.0
 
-## TODO 
- - Make sure calls are appStyle Safe
+$ npm install
+$ node server 
 
 ## Features
-- Users
+- Users [Not done]
 - Admin Dashboard
 - Decorates JSON
 - Saves Locally
-- Deployes to Harp Platform
+- Deployes to Harp Platform [Not done]
 
 
 ## MVP TODOS

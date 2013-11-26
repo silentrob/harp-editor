@@ -1,7 +1,7 @@
 {
-  "name": "harp-cms",
+  "name": "harp-editor",
   "version": "0.0.0",
-  "description": "A CMS built on top of Harp web server",
+  "description": "A Editor built on top of Harp web server",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
