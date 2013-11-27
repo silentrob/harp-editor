@@ -1,4 +1,5 @@
 {
 	"port" : 3000,
-	"boilerplate": "/Users/robellis/projects/harp/baseline-git"
+	"boilerplate": "/Users/robellis/projects/harp/baseline-git",
+	"defaultFileType": "md"
 }

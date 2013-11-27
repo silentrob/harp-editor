@@ -16,7 +16,8 @@
     "connect-flash":"*",
     "walk":"*",
     "underscore":"*",
-    "password-hash":"*"
+    "password-hash":"*",
+    "slug":"0.4.0"
   },
   "repository": "",
   "author": "Rob Ellis",

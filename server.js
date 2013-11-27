@@ -1,16 +1,14 @@
 var express 			= require('express');
 var passwordHash 	= require('password-hash');
-var harp 					= require("harp");
+var harp 					= require('harp');
 var nodePath 			= require('path');
 var busboy 				= require('connect-busboy');
 var flash 				= require('connect-flash');
-var editor				= require("./lib/editor");
-var config 				= require("./config");
-
+var editor				= require('./lib/editor');
+var config 				= require('./config');
 var app 					= express();
 
 var dynamicHelpers = require("./lib/helpers");
-
 
 var projectPath = nodePath.resolve(process.cwd(), config.boilerplate || "");
 var cfg = editor.loadBoilerPlate(projectPath);
@@ -41,14 +39,12 @@ app.configure(function() {
 
 function checkAuth(req, res, next) {
   if (!req.session.user_id) {
-    res.redirect("/admin");
-    // next();
+    // res.redirect("/admin");
+    next();
   } else {
     next();
   }
 }
-
-// console.log(passwordHash.verify("password", "sha1$bc151f33$1$63da2b1573a494d3125eec50c70cb7fab3253c27"))
 
 app.get('/admin', function(req, res){
   res.render("login", { message: req.flash('error') })
@@ -121,8 +117,10 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 			updated_by: req.session.user_id || "Unknown User"
 		};
 
-		editor.updateMetaData(req.body.slug, cfg, data, function(err, result){
-			editor.writeFileBySlug(req.body.slug + ".md" , cfg, req.body.content, function(fileContents) {
+		var slug = editor.utils.slug(req.body.slug);
+
+		editor.updateMetaData(slug, cfg, data, function(err, result){
+			editor.writeFileBySlug(slug + "." + config.defaultFileType, cfg, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
 			});
 		});
