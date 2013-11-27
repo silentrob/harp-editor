@@ -72,11 +72,29 @@ app.post("/admin/publish", checkAuth, function(req, res){
 		updated_by: req.session.user_id || "Unknown User"
 	};
 
-	editor.updateMetaData(req.body.file, cfg, data, function(err, result){
-		editor.writeFileBySlug(req.body.file, cfg, req.body.content, function(fileContents) {
-			res.redirect("/admin/content");
+	editor.updateMetaData(req.body.slug, cfg, data, function(err, result){
+
+		// Write method needs to know the file extension, so we should pass in the origional
+		// If non exists, we can make a best guess or fall back to the system default
+		var ext = editor.utils.getExtension(req.body.file);
+		editor.writeFileBySlug(req.body.slug, ext, cfg, req.body.content, function(fileContents) {
+			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
+			if(req.body.slug !== existingSlug) {
+			// Renaming
+				// This needs to be changed to Actual slug + file EXT
+			  editor.removeFileBySlug(existingSlug ,ext, cfg, function(){
+					console.log("Remove Old file, metaData");
+					res.redirect("/admin/content");
+			  });
+			} else {
+				console.log("We Are good");
+				res.redirect("/admin/content");	
+			}
+			
 		});
-	});
+	});		
+
+
 });
 
 // Main content listing.
@@ -120,7 +138,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		var slug = editor.utils.slug(req.body.slug);
 
 		editor.updateMetaData(slug, cfg, data, function(err, result){
-			editor.writeFileBySlug(slug + "." + config.defaultFileType, cfg, req.body.content, function(fileContents) {
+			editor.writeFileBySlug(slug, config.defaultFileType, cfg, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
 			});
 		});
