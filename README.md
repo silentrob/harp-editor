@@ -32,7 +32,7 @@ Note the version is 0.0.0
 - Image upload
 
 
-# The MIT License (MIT)
+# License (MIT)
 
 Copyright (c) 2013 Rob Ellis
 

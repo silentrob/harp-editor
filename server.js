@@ -115,7 +115,9 @@ app.get('/admin/content/new', checkAuth, function(req, res) {
 });
 
 app.del('/admin/content', checkAuth, function(req, res) {
-	editor.removeFileBySlug(req.body.file, cfg, function(fileContents) {
+	var slug = editor.utils.normaizeFilePart(req.body.file)
+	var ext = editor.utils.getExtension(req.body.file);
+	editor.removeFileBySlug(slug, ext, cfg, function(fileContents) {
 		res.redirect("/admin/content");
 	});
 });
