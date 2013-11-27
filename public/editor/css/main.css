@@ -95,6 +95,7 @@ body {
   padding-left:10px;
 }
 .hb-view {
+  padding:0px;
   text-align: center;
   border-left:1px solid #ccc;
 }

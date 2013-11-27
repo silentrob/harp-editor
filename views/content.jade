@@ -28,16 +28,12 @@ block body
                     .hb-content-item
                       a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
                       small.pull-right.hb-muted= files[k]
-                  .col-md-1
-                    .hb-view
-                      form(method="post", action="/admin/content")
-                        input(type="hidden", name="_method", value="delete")
-                        input(type="hidden", name="file", value="#{files[k]}")
-
-                        button.btn.btn-link
-                          i.fa.fa-times.fa-fw.hb-muted                    
-                  .col-md-1
-                    - if (!isHidden(files[k]))
-                      .hb-view
-                        a.btn.btn-link(href="#{link(files[k])}") 
-                          i.fa.fa-link.fa-fw.hb-muted
+                  .col-md-1.hb-view
+                    form(method="post", action="/admin/content")
+                      input(type="hidden", name="_method", value="delete")
+                      input(type="hidden", name="file", value="#{files[k]}")
+                      button.btn.btn-link
+                        i.fa.fa-times.fa-fw.hb-muted                    
+                  .col-md-1.hb-view
+                    a.btn.btn-link(href="#{link(files[k])}") 
+                      i.fa.fa-link.fa-fw.hb-muted
