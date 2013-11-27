@@ -82,7 +82,7 @@ app.post("/admin/publish", checkAuth, function(req, res){
 			if(req.body.slug !== existingSlug) {
 			// Renaming
 				// This needs to be changed to Actual slug + file EXT
-			  editor.removeFileBySlug(existingSlug ,ext, cfg, function(){
+			  editor.removeFileBySlug(existingSlug, ext, cfg, function(){
 					console.log("Remove Old file, metaData");
 					res.redirect("/admin/content");
 			  });
