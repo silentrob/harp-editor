@@ -17,7 +17,6 @@ Note the version is 0.0.0
 
 ## MVP TODOS
 - Create Page (at any depth)
-- Rename Page
 - Create Lists.
 - Add better editor
 - Add CLI to init 
