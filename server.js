@@ -62,7 +62,6 @@ app.get('/admin/publish', checkAuth, function(req, res) {
 });
 
 // TODO - Handle custom / extra fields
-// TODO - Handle rename
 app.post("/admin/publish", checkAuth, function(req, res){
 
 	var data = {
@@ -132,9 +131,10 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		};
 
 		var slug = editor.utils.slug(req.body.slug);
+		var base = editor.uitls.reduceFilePart(req.body.path);
 
-		editor.updateMetaData(slug, cfg, data, function(err, result){
-			editor.writeFileBySlug(slug, config.defaultFileType, cfg, req.body.content, function(fileContents) {
+		editor.updateMetaData(slug, cfg, data, function(err, result) {
+			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
 			});
 		});
