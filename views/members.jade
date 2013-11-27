@@ -18,15 +18,11 @@ block body
           span New Member
     .row
       .col-sm-12
-        ul.hb-content
+        table.table.table-hover.table-bordered
           - for(var i = 0; i < members.length; i++)
-            li
-              .row
-                .col-sm-11
-                  .hb-content-item
-                    a(href="#") #{memberDisplayName(members[i])}
-                .col-sm-1
-                  .hb-view
-                    a(href="#") 
-                      i.fa.fa-times.fa-fw.hb-muted
-
+            tr
+              td.table-main-col
+                a(href="#") #{memberDisplayName(members[i])}
+              td
+                a.btn.btn-link(href="#")
+                  i.glyphicon.glyphicon-remove.text-muted

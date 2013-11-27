@@ -111,3 +111,14 @@ body {
 .hb-table tr td {
   padding:15px !important;
 }
+
+
+.table {
+  background: #fff;
+}
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+.table-main-col {
+  width: 100%;
+}

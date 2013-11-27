@@ -19,21 +19,19 @@ block body
 
     .row
       .col-sm-12
-        ul.hb-content
+        table.table.table-hover.table-bordered
           each file, k in files
             - if (!isHidden(files[k]))
-              li
-                .row
-                  .col-md-10
-                    .hb-content-item
-                      a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
-                      small.pull-right.hb-muted= files[k]
-                  .col-md-1.hb-view
-                    form(method="post", action="/admin/content")
-                      input(type="hidden", name="_method", value="delete")
-                      input(type="hidden", name="file", value="#{files[k]}")
-                      button.btn.btn-link
-                        i.fa.fa-times.fa-fw.hb-muted                    
-                  .col-md-1.hb-view
-                    a.btn.btn-link(href="#{link(files[k])}") 
-                      i.fa.fa-link.fa-fw.hb-muted
+              tr
+                td.table-main-col
+                  a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
+                  small.pull-right.hb-muted= files[k]
+                td
+                  form(method="post", action="/admin/content")
+                    input(type="hidden", name="_method", value="delete")
+                    input(type="hidden", name="file", value="#{files[k]}")
+                    button.btn.btn-link
+                      i.glyphicon.glyphicon-remove.text-muted
+                td
+                  a.btn.btn-link(href="#{link(files[k])}") 
+                    i.glyphicon.glyphicon-link.text-muted
