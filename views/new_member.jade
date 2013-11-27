@@ -15,6 +15,11 @@ block body
           span save
 
   .container
+    - if (message)
+      .row
+        .col-sm-12
+          p= message
+
     .row
       .col-sm-12
         form(action="/admin/member/new", method="post")

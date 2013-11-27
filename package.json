@@ -15,7 +15,8 @@
     "connect-busboy":"*",
     "connect-flash":"*",
     "walk":"*",
-    "underscore":"*"
+    "underscore":"*",
+    "password-hash":"*"
   },
   "repository": "",
   "author": "Rob Ellis",

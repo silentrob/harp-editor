@@ -1,23 +1,18 @@
-var express 		= require('express');
+var express 			= require('express');
+var passwordHash 	= require('password-hash');
+var harp 					= require("harp");
+var nodePath 			= require('path');
+var busboy 				= require('connect-busboy');
+var flash 				= require('connect-flash');
+var editor				= require("./lib/editor");
+var config 				= require("./config");
 
-var harp 				= require("harp");
-var nodePath 		= require('path');
-var busboy 			= require('connect-busboy');
-var flash 			= require('connect-flash');
-var editor			= require("./lib/editor");
-
-var app 				= express();
+var app 					= express();
 
 var dynamicHelpers = require("./lib/helpers");
 
 
-// Settings
-var port = 3000;
-
-// This will come from the CLI
-var path = "__ PATH TO BOILERPLATE __";
-
-var projectPath = nodePath.resolve(process.cwd(), path || "");
+var projectPath = nodePath.resolve(process.cwd(), config.boilerplate || "");
 var cfg = editor.loadBoilerPlate(projectPath);
 
 app.configure(function() {
@@ -53,14 +48,11 @@ function checkAuth(req, res, next) {
   }
 }
 
+// console.log(passwordHash.verify("password", "sha1$bc151f33$1$63da2b1573a494d3125eec50c70cb7fab3253c27"))
+
 app.get('/admin', function(req, res){
   res.render("login", { message: req.flash('error') })
 });
-
-// Not really used - Maybe later
-// app.get('/admin/home', checkAuth, function(req, res){
-//   res.render("home")
-// });
 
 app.get('/admin/publish', checkAuth, function(req, res) {
 	editor.fetchFileBySlug(req.query.path, cfg, function(fileContents) {
@@ -137,18 +129,38 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 	}
 });
 
-// TODO Finish this and POST
 app.get('/admin/members', checkAuth, function(req, res){
 	res.render("members", {members:cfg.harpJSON.users});
 });
 
 app.get("/admin/member/new", checkAuth, function(req, res){
-	res.render("new_member");
+	res.render("new_member", {message:req.flash("error")});
 });
 
 app.post("/admin/member/new", checkAuth, function(req, res){
 	console.log(req.body)
-	res.redirect("/admin/members")
+	if (req.body.username && req.body.password1) {
+		if (req.body.password1 !== req.body.password2) {
+			req.flash("error", "Passwords don't match");
+			res.redirect("/admin/member/new")
+		} else {
+
+			var data = {
+				first_name: req.body.first_name,
+				last_name: req.body.last_name,
+				username: req.body.username,
+				password: passwordHash.generate(req.body.password1),
+				email: req.body.email
+			}
+			editor.addMember(cfg, data, function(){
+				res.redirect("/admin/members")			
+			});
+		}
+	} else {
+		req.flash("error", "Username and password is required");
+		res.redirect("/admin/member/new")
+	}
+	
 });
 
 // List section
@@ -179,13 +191,34 @@ app.get('/admin/logout', function (req, res) {
 
 app.post('/admin/login', function(req, res){
 	if (req.body.username != "" && req.body.password != "") {
-		for (var i = 0; i < cfg.harpJSON.users.length; i++) {
-			if(cfg.harpJSON.users[i].username === req.body.username && cfg.harpJSON.users[i].password === req.body.password) {
-				req.session.user_id = cfg.harpJSON.users[i].username;
+		if (typeof cfg.harpJSON.users === 'undefined') {
+			var data = {
+				username: req.body.username,
+				password: passwordHash.generate(req.body.password)
+			}
+
+			editor.addMember(cfg, data, function(){
+				req.session.user_id = req.body.username;
+				res.redirect("/admin/content");	
+			});
+			
+		} else {
+			var pass = false, user = null;
+			for (var i = 0; i < cfg.harpJSON.users.length; i++) {
+				if(cfg.harpJSON.users[i].username === req.body.username) {
+					if (passwordHash.verify(req.body.password, cfg.harpJSON.users[i].password) == true) {
+						pass = true;
+						user = req.body.username;
+					}
+				}
+			}
+
+			if (pass) {
+				req.session.user_id = user;
 				res.redirect("/admin/content");
 			} else {
 				req.flash('error', 'Invalid Username or Password');
-				res.redirect("/admin");
+				res.redirect("/admin");				
 			}
 		}
 	} else {
@@ -194,5 +227,5 @@ app.post('/admin/login', function(req, res){
 	}
 });
 
-app.listen(port);
-console.log("Listening on Port", port)
+app.listen(config.port);
+console.log("Listening on Port", config.port)
