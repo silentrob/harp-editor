@@ -34,10 +34,10 @@ block body
                         input(type="hidden", name="_method", value="delete")
                         input(type="hidden", name="file", value="#{files[k]}")
 
-                        button.btn.btn-danger
+                        button.btn.btn-link
                           i.fa.fa-times.fa-fw.hb-muted                    
                   .col-md-1
                     - if (!isHidden(files[k]))
                       .hb-view
-                        a(href="#{link(files[k])}") 
+                        a.btn.btn-link(href="#{link(files[k])}") 
                           i.fa.fa-link.fa-fw.hb-muted

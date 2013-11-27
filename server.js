@@ -80,20 +80,14 @@ app.post("/admin/publish", checkAuth, function(req, res){
 		editor.writeFileBySlug(req.body.slug, ext, cfg, req.body.content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			if(req.body.slug !== existingSlug) {
-			// Renaming
-				// This needs to be changed to Actual slug + file EXT
 			  editor.removeFileBySlug(existingSlug, ext, cfg, function(){
-					console.log("Remove Old file, metaData");
 					res.redirect("/admin/content");
 			  });
 			} else {
-				console.log("We Are good");
 				res.redirect("/admin/content");	
 			}
-			
 		});
-	});		
-
+	});
 
 });
 
