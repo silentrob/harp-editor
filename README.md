@@ -17,6 +17,8 @@ Note the version is 0.0.0
 
 ## MVP TODOS
 - Create Page (at any depth)
+- Attaching Metadata at Depth
+- Not flashing metadata
 - Create Lists.
 - Add better editor
 - Add CLI to init 

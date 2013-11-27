@@ -46,12 +46,14 @@ function checkAuth(req, res, next) {
   }
 }
 
+
 app.get('/admin', function(req, res){
   res.render("login", { message: req.flash('error') })
 });
 
 app.get('/admin/publish', checkAuth, function(req, res) {
-	editor.fetchFileBySlug(req.query.path, cfg, function(fileContents) {
+	console.log(req.query.path)
+	editor.fetchFileByPath(req.query.path, cfg, function(fileContents) {
 		editor.getMetaData(req.query.path, cfg, function(err, metaData){
 			editor.layouts.fetchLayouts(cfg, function(err, layouts){
 				var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
@@ -76,10 +78,12 @@ app.post("/admin/publish", checkAuth, function(req, res){
 		// Write method needs to know the file extension, so we should pass in the origional
 		// If non exists, we can make a best guess or fall back to the system default
 		var ext = editor.utils.getExtension(req.body.file);
-		editor.writeFileBySlug(req.body.slug, ext, cfg, req.body.content, function(fileContents) {
+		var base = editor.utils.reduceFilePart(req.body.file);
+
+		editor.writeFileBySlug(req.body.slug, base, ext, cfg, req.body.content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			if(req.body.slug !== existingSlug) {
-			  editor.removeFileBySlug(existingSlug, ext, cfg, function(){
+			  editor.removeFileBySlug(existingSlug, base, ext, cfg, function(){
 					res.redirect("/admin/content");
 			  });
 			} else {
@@ -110,7 +114,9 @@ app.get('/admin/content/new', checkAuth, function(req, res) {
 app.del('/admin/content', checkAuth, function(req, res) {
 	var slug = editor.utils.normaizeFilePart(req.body.file)
 	var ext = editor.utils.getExtension(req.body.file);
-	editor.removeFileBySlug(slug, ext, cfg, function(fileContents) {
+	var base = editor.utils.reduceFilePart(req.body.file);
+
+	editor.removeFileBySlug(slug, base,  ext, cfg, function(fileContents) {
 		res.redirect("/admin/content");
 	});
 });
@@ -131,7 +137,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		};
 
 		var slug = editor.utils.slug(req.body.slug);
-		var base = editor.uitls.reduceFilePart(req.body.path);
+		var base = editor.utils.reduceFilePart(req.body.path);
 
 		editor.updateMetaData(slug, cfg, data, function(err, result) {
 			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, req.body.content, function(fileContents) {
