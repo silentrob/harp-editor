@@ -9,7 +9,7 @@ Note the version is 0.0.0
 	$ node server 
 
 ## Features
-- Users [Not done]
+- Users
 - Admin Dashboard
 - Decorates JSON
 - Saves Locally

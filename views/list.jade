@@ -19,15 +19,36 @@ block body
 
     .row
       table.hb-table.table.table-hover
-        thead
-          tr
-            th Title
-            th Date 
-            th View
-        each obj, dataKey in metaData
-          tr
-            td: a(href="/admin/publish?path=")= listTitle(dataKey, obj)
-            td= obj.date 
-            td
-              a(href="#{listRoot}/#{link(dataKey)}") 
-                i.glyphicon.glyphicon-link.glyphicon-fw.hb-muted
+        if (metaData['editor'] && metaData['editor'].table)
+          thead
+            tr
+              -for (var i = 0; i < metaData['editor'].table.length; i++)
+                th= keyToTitle(metaData['editor'].table[i])
+              th View
+          each obj, dataKey in metaData
+            tbody
+              if (obj.type != "metadata" && dataKey != "editor")
+                tr
+                  -for (var i = 0; i < metaData['editor'].table.length; i++)
+                    - var column = metaData['editor'].table[i];
+                    if (i == 0)
+                      td: a(href="/admin/publish?path=")= obj[column]
+                    else
+                      td= obj[column]
+
+                  td
+                    a(href="#{listRoot}/#{link(dataKey)}") 
+                      i.glyphicon.glyphicon-link.glyphicon-fw.hb-muted
+        else
+          thead
+            tr
+              th Title
+              th View
+          tbody
+            each obj, dataKey in metaData
+              if (obj.type != "metadata" && dataKey != "editor")
+                tr
+                  td: a(href="/admin/publish?path=")= listTitle(dataKey, obj)
+                  td
+                    a(href="#{listRoot}/#{link(dataKey)}") 
+                      i.glyphicon.glyphicon-link.glyphicon-fw.hb-muted
