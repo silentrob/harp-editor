@@ -121,4 +121,12 @@ body {
 }
 .table-main-col {
   width: 100%;
+  padding-left:10px;
+}
+
+.hb-space {
+  width:10px;
+  height:20px;
+  display:block;
+  float:left;
 }

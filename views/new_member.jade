@@ -7,23 +7,22 @@ block body
   include _shared/nav
 
   .container
-    .row.hb-status-bar(style="margin-top:15px;")
-      .col-sm-9.hb-status-col
-        span Create New Member
-      .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
-        a(href="#")
-          span save
+    form(action="/admin/member/new", method="post")
+      .row.hb-status-bar(style="margin-top:15px;")
+        .col-sm-9.hb-status-col
+          span Create New Member
+        .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+          a(href="#")
+            button.btn-link.btn save
 
-  .container
-    - if (message)
+    .container
+      - if (message)
+        .row
+          .col-sm-12
+            p= message
+
       .row
         .col-sm-12
-          p= message
-
-    .row
-      .col-sm-12
-        form(action="/admin/member/new", method="post")
-
           .form-group
             label Username
             input.form-control(type="text", name="username" placeholder="Username")

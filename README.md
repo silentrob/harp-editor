@@ -16,9 +16,11 @@ Note the version is 0.0.0
 - Deployes to Harp Platform [Not done]
 
 ## MVP TODOS
-- Remove Meta data when removing files
 - Create Lists.
 - Add CLI to init 
+- menu active state
+- Add Titles to content list
+- Add inherited layouts to subfolders
 
 ## MDP TODOS
 - TESTS

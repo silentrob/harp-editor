@@ -69,12 +69,12 @@ app.get('/admin/publish', checkAuth, function(req, res) {
 app.post("/admin/publish", checkAuth, function(req, res){
 
 	var data = {
+		type: "metadata",
 		title: req.body.title,
 		layout: req.body.layout,
 		updated_at: new Date(),
 		updated_by: req.session.user_id || "Unknown User"
 	};
-
 
 	// Write method needs to know the file extension, so we should pass in the origional
 	// If non exists, we can make a best guess or fall back to the system default
@@ -86,7 +86,9 @@ app.post("/admin/publish", checkAuth, function(req, res){
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			if(req.body.slug !== existingSlug) {
 			  editor.removeFileBySlug(existingSlug, base, ext, cfg, function(){
-					res.redirect("/admin/content");
+			  	editor.removeMetaData(existingSlug, base, cfg, function(err, result){
+						res.redirect("/admin/content");
+					});
 			  });
 			} else {
 				res.redirect("/admin/content");	
@@ -119,7 +121,9 @@ app.del('/admin/content', checkAuth, function(req, res) {
 	var base = editor.utils.reduceFilePart(req.body.file);
 
 	editor.removeFileBySlug(slug, base,  ext, cfg, function(fileContents) {
-		res.redirect("/admin/content");
+		editor.removeMetaData(slug, base, cfg, function(err, result){
+			res.redirect("/admin/content");
+		});
 	});
 });
 
@@ -130,8 +134,9 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 	} else {
 
 		// TODO - Does this slug exist already?
-		// Default File type? MD?
+
 		var data = {
+			type: "metadata",
 			title: req.body.title,
 			layout: req.body.layout,
 			updated_at: new Date(),

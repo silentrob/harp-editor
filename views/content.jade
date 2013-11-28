@@ -19,9 +19,10 @@ block body
 
     .row
       .col-sm-12
-        table.table.table-hover.table-bordered
-          each file, k in files
-            - if (!isHidden(files[k]))
+        each file, k in files
+          - if (!isHidden(files[k]))
+
+            table.table.table-hover.table-bordered(style="margin-bottom:3px;float:right;width:#{100 - (nestDepth(files[k]) -1) * 3}%")
               tr
                 td.table-main-col
                   a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
