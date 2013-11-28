@@ -19,17 +19,28 @@ block body
 
     .row
       .col-sm-12
+        - var prevFP = [];
         each file, k in files
           - if (!isHidden(files[k]))
-
+            - prevFP.push(reduceFilePart(files[k]))
+            - if(prevFP.length == 3)
+              - prevFP.shift()
+              - if (prevFP[0] != prevFP[1])
+                
+                table.table.table-hover.table-bordered(style="margin-bottom:3px;float:right;width:#{100 - (nestDepth(files[k]) -1) * 3}%")
+                  tr
+                    td.table-main-col
+                      span New File in: 
+                        b #{fileToTitle(files[k])}
+                    td
+                      a.btn.btn-link(href="/admin/content/new?path=#{link(files[k])}") 
+                        i.glyphicon.glyphicon-file.text-muted                  
+                    
             table.table.table-hover.table-bordered(style="margin-bottom:3px;float:right;width:#{100 - (nestDepth(files[k]) -1) * 3}%")
               tr
                 td.table-main-col
                   a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
                   small.pull-right.hb-muted= files[k]
-                td
-                  a.btn.btn-link(href="/admin/content/new?path=#{link(files[k])}") 
-                    i.glyphicon.glyphicon-file.text-muted                  
                 td
                   form(method="post", action="/admin/content")
                     input(type="hidden", name="_method", value="delete")
