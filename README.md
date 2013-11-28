@@ -16,14 +16,13 @@ Note the version is 0.0.0
 - Deployes to Harp Platform [Not done]
 
 ## MVP TODOS
-- Create Page (at any depth)
-- Attaching Metadata at Depth
 - Not flashing metadata
 - Create Lists.
-- Add better editor
 - Add CLI to init 
 
 ## MDP TODOS
+- TESTS
+- Add better editor
 - Safe Delete
 - First Launch expierence
 - Deploy to Harp Platform

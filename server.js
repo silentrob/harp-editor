@@ -52,9 +52,11 @@ app.get('/admin', function(req, res){
 });
 
 app.get('/admin/publish', checkAuth, function(req, res) {
-	console.log(req.query.path)
 	editor.fetchFileByPath(req.query.path, cfg, function(fileContents) {
-		editor.getMetaData(req.query.path, cfg, function(err, metaData){
+		var base = editor.utils.reduceFilePart(req.query.path);
+
+
+		editor.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, cfg, function(err, metaData){
 			editor.layouts.fetchLayouts(cfg, function(err, layouts){
 				var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
 				res.render("edit", {file:req.query.path,  contents:fileContents, metaData: metaData, layouts:layouts});
@@ -73,13 +75,13 @@ app.post("/admin/publish", checkAuth, function(req, res){
 		updated_by: req.session.user_id || "Unknown User"
 	};
 
-	editor.updateMetaData(req.body.slug, cfg, data, function(err, result){
 
-		// Write method needs to know the file extension, so we should pass in the origional
-		// If non exists, we can make a best guess or fall back to the system default
-		var ext = editor.utils.getExtension(req.body.file);
-		var base = editor.utils.reduceFilePart(req.body.file);
+	// Write method needs to know the file extension, so we should pass in the origional
+	// If non exists, we can make a best guess or fall back to the system default
+	var ext = editor.utils.getExtension(req.body.file);
+	var base = editor.utils.reduceFilePart(req.body.file);
 
+	editor.updateMetaData(req.body.slug, base, cfg, data, function(err, result){
 		editor.writeFileBySlug(req.body.slug, base, ext, cfg, req.body.content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			if(req.body.slug !== existingSlug) {
@@ -139,7 +141,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		var slug = editor.utils.slug(req.body.slug);
 		var base = editor.utils.reduceFilePart(req.body.path);
 
-		editor.updateMetaData(slug, cfg, data, function(err, result) {
+		editor.updateMetaData(slug, base, cfg, data, function(err, result) {
 			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
 			});

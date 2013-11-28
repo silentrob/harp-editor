@@ -27,6 +27,9 @@ block body
                   a(href="/admin/publish?path=#{files[k]}")= fileToTitle(files[k])
                   small.pull-right.hb-muted= files[k]
                 td
+                  a.btn.btn-link(href="/admin/content/new?path=#{link(files[k])}") 
+                    i.glyphicon.glyphicon-file.text-muted                  
+                td
                   form(method="post", action="/admin/content")
                     input(type="hidden", name="_method", value="delete")
                     input(type="hidden", name="file", value="#{files[k]}")
