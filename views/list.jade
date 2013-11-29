@@ -13,12 +13,13 @@ block body
         span Viewing list 
         b= list
       .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
-        a(href="#")
-          i.glyphicon.glyphicon-plus.glyphicon-fw(style="margin-right:6px")
-          a(href="/admin/list/new") New Entry
+        a(href="/admin/content/new?path=/#{list}&type=entry")
+          i.glyphicon.glyphicon-plus.glyphicon-fw(style="margin-right:6px") 
+          | New Entry
 
     .row
-      table.hb-table.table.table-hover
+      table#hb-table.hb-table.table.table-hover
+        //- Custom Headers provided in _data
         if (metaData['editor'] && metaData['editor'].table)
           thead
             tr
@@ -35,11 +36,11 @@ block body
                       td: a(href="/admin/publish?path=")= obj[column]
                     else
                       td= obj[column]
-
                   td
                     a(href="#{listRoot}/#{link(dataKey)}") 
                       i.glyphicon.glyphicon-link.glyphicon-fw.hb-muted
         else
+          //- Default headers
           thead
             tr
               th Title
@@ -48,7 +49,7 @@ block body
             each obj, dataKey in metaData
               if (obj.type != "metadata" && dataKey != "editor")
                 tr
-                  td: a(href="/admin/publish?path=")= listTitle(dataKey, obj)
+                  td: a(href="/admin/publish?path=/blog/#{dataKey}.md")= listTitle(dataKey, obj)
                   td
                     a(href="#{listRoot}/#{link(dataKey)}") 
                       i.glyphicon.glyphicon-link.glyphicon-fw.hb-muted

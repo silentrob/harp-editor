@@ -7,7 +7,7 @@ block body
   include _shared/nav
 
   .container(style="margin-top:15px;")
-    form.container(action="/admin/publish", method="post")
+    form.js-form.container(action="/admin/publish", method="post")
       .row.hb-status-bar
         .col-sm-9.hb-status-col
           span Editing Page 
@@ -18,12 +18,6 @@ block body
             button.btn.btn-link Save Page
 
       input(type="hidden", name="file", value="#{file}")
-      .row
-        .col-sm-12
-          .form-group
-            label Title
-            input.form-control(name="title", value="#{getTitle(metaData)}")
-
       .row
         .col-sm-12
           .form-group
@@ -40,9 +34,41 @@ block body
             label Slug
             input.form-control(name="slug", value="#{fileToSlug(file)}")
 
+      hr
+
       .row
         .col-sm-12
           .form-group
-            label Page Content
-            textarea.form-control(name="content", rows="24",style="white-space: pre-wrap") #{contents}
+            label Title
+            input.hb-form-title.form-control(name="title", value="#{getTitle(metaData)}", placeholder="Title")
+
+      .row
+        .col-sm-12
+          - if (extension(file) != "md")
+            .form-group
+              label Page Content
+              textarea.js-content.form-control(name="content", rows="24",style="white-space: pre-wrap") #{contents}
+          - else
+            input.js-content-hidden(type="hidden" name="content", value="")
+            .editable.
+              !{contents}
+
           button.btn.btn-primary.pull-right Save 
+
+    script.
+
+      $(function() {
+        var editor = new MediumEditor('.editable');
+        $(".js-form").submit(function( event ) {
+          event.preventDefault();
+
+
+          if ($(".js-content").length != 0) {
+            this.submit();
+          } else {
+            var contentObj = editor.serialize();
+            $(".js-content-hidden").val(contentObj['element-0'].value);
+            this.submit();
+          }
+        });
+      });

@@ -1,9 +1,11 @@
+/*global console, module*/
+
 function MediumEditor(elements, options) {
     'use strict';
     return this.init(elements, options);
 }
 
-if (window.module !== undefined) {
+if (typeof module === 'object') {
     module.exports = MediumEditor;
 }
 
@@ -64,21 +66,21 @@ if (window.module !== undefined) {
     // by Tim Down
     function getSelectionHtml() {
         var i,
-            html = "",
+            html = '',
             sel,
             len,
             container;
         if (window.getSelection !== undefined) {
             sel = window.getSelection();
             if (sel.rangeCount) {
-                container = document.createElement("div");
+                container = document.createElement('div');
                 for (i = 0, len = sel.rangeCount; i < len; i += 1) {
                     container.appendChild(sel.getRangeAt(i).cloneContents());
                 }
                 html = container.innerHTML;
             }
         } else if (document.selection !== undefined) {
-            if (document.selection.type === "Text") {
+            if (document.selection.type === 'Text') {
                 html = document.selection.createRange().htmlText;
             }
         }
@@ -87,7 +89,9 @@ if (window.module !== undefined) {
 
     MediumEditor.prototype = {
         defaults: {
+            allowMultiParagraphSelection: true,
             anchorInputPlaceholder: 'Paste or type a link',
+            buttons: ['bold', 'italic', 'underline', 'anchor', 'header1', 'header2', 'quote'],
             delay: 0,
             diffLeft: 0,
             diffTop: -10,
@@ -95,10 +99,9 @@ if (window.module !== undefined) {
             disableToolbar: false,
             firstHeader: 'h3',
             forcePlainText: true,
-            allowMultiParagraphSelection: true,
             placeholder: 'Type your text',
             secondHeader: 'h4',
-            buttons: ['bold', 'italic', 'underline', 'anchor', 'header1', 'header2', 'quote']
+            targetBlank: false
         },
 
         init: function (elements, options) {
@@ -107,7 +110,7 @@ if (window.module !== undefined) {
                 return;
             }
             this.isActive = true;
-            this.parentElements = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote'];
+            this.parentElements = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre'];
             this.id = document.querySelectorAll('.medium-editor-toolbar').length + 1;
             this.options = extend(options, this.defaults);
             return this.initElements()
@@ -126,7 +129,7 @@ if (window.module !== undefined) {
                     this.elements[i].setAttribute('data-placeholder', this.options.placeholder);
                 }
                 this.elements[i].setAttribute('data-medium-element', true);
-                this.bindParagraphCreation(i).bindReturn(i);
+                this.bindParagraphCreation(i).bindReturn(i).bindTab(i);
                 if (!this.options.disableToolbar && !this.elements[i].getAttribute('data-disable-toolbar')) {
                     addToolbar = true;
                 }
@@ -138,6 +141,19 @@ if (window.module !== undefined) {
                     .bindAnchorForm();
             }
             return this;
+        },
+
+        serialize: function () {
+            var i,
+                elementid,
+                content = {};
+            for (i = 0; i < this.elements.length; i += 1) {
+                elementid = (this.elements[i].id !== '') ? this.elements[i].id : 'element-' + i;
+                content[elementid] = {
+                    value: this.elements[i].innerHTML.trim()
+                };
+            }
+            return content;
         },
 
         bindParagraphCreation: function (index) {
@@ -173,6 +189,20 @@ if (window.module !== undefined) {
                     }
                 }
             });
+            return this;
+        },
+
+        bindTab: function (index) {
+            this.elements[index].addEventListener('keydown', function (e) {
+                if (e.which === 9) {
+                    // Override tab only for pre nodes
+                    var tag = getSelectionStart().tagName.toLowerCase();
+                    if (tag === "pre") {
+                        e.preventDefault();
+                        document.execCommand('insertHtml', null, '    ');
+                    }
+                }
+            });
         },
 
         buttonTemplate: function(btnType) {
@@ -187,7 +217,8 @@ if (window.module !== undefined) {
                 'header2': '<li><button class="medium-editor-action medium-editor-action-header2" data-action="append-' + this.options.secondHeader + '" data-element="' + this.options.secondHeader + '">h2</button></li>',
                 'quote': '<li><button class="medium-editor-action medium-editor-action-quote" data-action="append-blockquote" data-element="blockquote">&ldquo;</button></li>',
                 'orderedlist': '<li><button class="medium-editor-action medium-editor-action-orderedlist" data-action="insertorderedlist" data-element="ol">1.</button></li>',
-                'unorderedlist': '<li><button class="medium-editor-action medium-editor-action-unorderedlist" data-action="insertunorderedlist" data-element="ul">&bull;</button></li>'
+                'unorderedlist': '<li><button class="medium-editor-action medium-editor-action-unorderedlist" data-action="insertunorderedlist" data-element="ul">&bull;</button></li>',
+                'pre': '<li><button class="medium-editor-action medium-editor-action-pre" data-action="append-pre" data-element="pre">0101</button></li>'
             };
             return buttonTemplates[btnType] || false;
         },
@@ -393,6 +424,7 @@ if (window.module !== undefined) {
                     } else {
                         this.className += ' medium-editor-button-active';
                     }
+                    console.log(this.getAttribute('data-action'));
                     self.execAction(this.getAttribute('data-action'), e);
                 };
             for (i = 0; i < buttons.length; i += 1) {
@@ -539,9 +571,25 @@ if (window.module !== undefined) {
             return this;
         },
 
+        setTargetBlank: function () {
+            var el = getSelectionStart(),
+                i;
+            if (el.tagName.toLowerCase() === 'a') {
+                el.target = '_blank';
+            } else {
+                el = el.getElementsByTagName('a');
+                for (i = 0; i < el.length; i += 1) {
+                    el[i].target = '_blank';
+                }
+            }
+        },
+
         createLink: function (input) {
             restoreSelection(this.savedSelection);
             document.execCommand('createLink', false, input.value);
+            if (this.options.targetBlank) {
+                this.setTargetBlank();
+            }
             this.showToolbarActions();
             input.value = '';
         },
@@ -599,7 +647,7 @@ if (window.module !== undefined) {
 
         bindPaste: function () {
             if (!this.options.forcePlainText) {
-                return;
+                return this;
             }
             var i,
                 self = this,
@@ -613,7 +661,7 @@ if (window.module !== undefined) {
                         if (!self.options.disableReturn) {
                             paragraphs = e.clipboardData.getData('text/plain').split(/[\r\n]/g);
                             for (p = 0; p < paragraphs.length; p += 1) {
-                                if (paragraphs[p] !== "") {
+                                if (paragraphs[p] !== '') {
                                     html += '<p>' + paragraphs[p] + '</p>';
                                 }
                             }

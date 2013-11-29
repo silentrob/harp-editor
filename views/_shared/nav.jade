@@ -10,13 +10,13 @@ nav.hb-navbar.navbar.navbar-default.navbar-static-top(role="navigation")
 
   #bs-example-navbar-collapse-1.collapse.navbar-collapse
     ul.nav.navbar-nav
-      li.active: a(href="/admin/content")
+      li(class='#{cc(nav,"content")}'): a(href="/admin/content")
         i.glyphicon.glyphicon-file.glyphicon-fw(style="margin-right:6px;") 
         | Content
-      li: a(href="/admin/members") 
+      li(class='#{cc(nav,"members")}'): a(href="/admin/members") 
         i.glyphicon.glyphicon-user.glyphicon-fw(style="margin-right:6px;") 
         | Members
-      li: a(href="/admin/settings") 
+      li(class='#{cc(nav,"settings")}'): a(href="/admin/settings") 
         i.glyphicon.glyphicon-cog.glyphicon-fw(style="margin-right:6px;") 
         | Settings
       

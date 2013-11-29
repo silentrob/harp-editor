@@ -15,15 +15,19 @@ Note the version is 0.0.0
 - Saves Locally
 - Deployes to Harp Platform [Not done]
 
-## MVP TODOS
+## MVP TODOS aka current issues
 - Create Lists.
+- Renaming files saves [Object]
 - Add CLI to init 
-- menu active state
 - Add Titles to content list
+- Filter entries out of pages
+- Filter out empty sections
+- delete _data files if you remove the last entry
 - Add inherited layouts to subfolders
 
 ## MDP TODOS
 - TESTS
+- Sorting Entries
 - Add better editor
 - Safe Delete
 - First Launch expierence

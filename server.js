@@ -2,7 +2,11 @@ var express 			= require('express');
 var passwordHash 	= require('password-hash');
 var harp 					= require('harp');
 var nodePath 			= require('path');
+var _ 		 				= require('underscore');
 var busboy 				= require('connect-busboy');
+var marked				= require('marked');
+var toMarkdown 		= require('to-markdown').toMarkdown;
+
 var flash 				= require('connect-flash');
 var editor				= require('./lib/editor');
 var config 				= require('./config');
@@ -23,11 +27,8 @@ app.configure(function() {
   app.use(express.methodOverride());
   app.use(busboy());
 
-	
   app.use(harp.mount(projectPath));
-
   app.use(express.static(__dirname + "/public"));
-
   app.use(dynamicHelpers.helpers());
 
   app.set("view engine", "jade");
@@ -46,7 +47,6 @@ function checkAuth(req, res, next) {
   }
 }
 
-
 app.get('/admin', function(req, res){
   res.render("login", { message: req.flash('error') })
 });
@@ -54,12 +54,16 @@ app.get('/admin', function(req, res){
 app.get('/admin/publish', checkAuth, function(req, res) {
 	editor.fetchFileByPath(req.query.path, cfg, function(fileContents) {
 		var base = editor.utils.reduceFilePart(req.query.path);
+		var ext = getExtension(req.query.path);
 
+		if (ext == "md") {
+			fileContents = marked(fileContents);
+		} 
 
 		editor.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, cfg, function(err, metaData){
 			editor.layouts.fetchLayouts(cfg, function(err, layouts){
 				var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
-				res.render("edit", {file:req.query.path,  contents:fileContents, metaData: metaData, layouts:layouts});
+				res.render("edit", {nav:'content', file:req.query.path,  contents:fileContents, metaData: metaData, layouts:layouts});
 			});
 		});
 	});
@@ -67,8 +71,9 @@ app.get('/admin/publish', checkAuth, function(req, res) {
 
 // TODO - Handle custom / extra fields
 app.post("/admin/publish", checkAuth, function(req, res){
+	var content, data, ext, base;
 
-	var data = {
+	data = {
 		type: "metadata",
 		title: req.body.title,
 		layout: req.body.layout,
@@ -78,11 +83,20 @@ app.post("/admin/publish", checkAuth, function(req, res){
 
 	// Write method needs to know the file extension, so we should pass in the origional
 	// If non exists, we can make a best guess or fall back to the system default
-	var ext = editor.utils.getExtension(req.body.file);
-	var base = editor.utils.reduceFilePart(req.body.file);
+	ext = editor.utils.getExtension(req.body.file);
+	base = editor.utils.reduceFilePart(req.body.file);
+
+	if (ext == "md") {
+		// var html2markdown = require("html2markdown");
+		// content = html2markdown(req.body.content)
+		content = toMarkdown(req.body.content);
+		console.log("Converted", content)
+	} else {
+		contents = req.body.content;
+	}
 
 	editor.updateMetaData(req.body.slug, base, cfg, data, function(err, result){
-		editor.writeFileBySlug(req.body.slug, base, ext, cfg, req.body.content, function(fileContents) {
+		editor.writeFileBySlug(req.body.slug, base, ext, cfg, content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			if(req.body.slug !== existingSlug) {
 			  editor.removeFileBySlug(existingSlug, base, ext, cfg, function(){
@@ -103,7 +117,7 @@ app.get('/admin/content', checkAuth, function(req, res) {
 	editor.fetchFiles(cfg, function(files) {
 		var rfiles = editor.utils.filterEditableSync(files);
 		editor.fetchSection(cfg, function(sections) {
-			res.render("content", {files:rfiles, sections: sections});
+			res.render("content", {nav:'content', files:rfiles, sections: sections});
 		});
 	});
 });
@@ -111,7 +125,7 @@ app.get('/admin/content', checkAuth, function(req, res) {
 app.get('/admin/content/new', checkAuth, function(req, res) {
 	editor.layouts.fetchLayouts(cfg, function(err, layouts){
 		var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
-		res.render("content_new",{message: req.flash('error'), layouts:layouts, path:req.query.path});
+		res.render("content_new",{nav:'content', message: req.flash('error'), layouts:layouts, path:req.query.path});
 	});
 });
 
@@ -155,11 +169,11 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 });
 
 app.get('/admin/members', checkAuth, function(req, res){
-	res.render("members", {members:cfg.harpJSON.users});
+	res.render("members", {nav:'members', members:cfg.harpJSON.users});
 });
 
 app.get("/admin/member/new", checkAuth, function(req, res){
-	res.render("new_member", {message:req.flash("error")});
+	res.render("new_member", {nav:'members', message:req.flash("error")});
 });
 
 app.post("/admin/member/new", checkAuth, function(req, res){
@@ -192,21 +206,20 @@ app.post("/admin/member/new", checkAuth, function(req, res){
 app.get("/admin/lists/:name", checkAuth, function(req, res){
 	editor.fetchSection(cfg, function(sections) {
 		editor.fetchMetaDataBySection(req.params.name, cfg, function(metaData, root) {
-			res.render("list", { list: req.params.name, listRoot:root, sections: sections, metaData: metaData});
+			res.render("list", {nav:'content', list: req.params.name, listRoot:root, sections: sections, metaData: metaData});	
 		});
 	});
 });
 
 app.get('/admin/settings', function (req, res) {
-  res.render('settings', {message: req.flash('info'), settings:cfg.harpJSON});
+  res.render('settings', {nav:'settings', message: req.flash('info'), settings:cfg.harpJSON});
 });
 
 app.post("/admin/settings", function(req, res){
 	editor.updateGlobals(cfg, req.body, function(err, result){
 		req.flash('info', 'Settings Saved');
 		res.redirect("/admin/settings");	
-	})
-	
+	});
 });
 
 app.get('/admin/logout', function (req, res) {

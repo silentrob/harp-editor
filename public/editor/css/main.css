@@ -130,3 +130,17 @@ body {
   display:block;
   float:left;
 }
+
+.hb-form-title {
+  height:65px;
+  font-size:28px;
+  border-radius: 0px;
+}
+.editable {
+ background-color: #fff;
+ padding:50px;
+}
+.editable:focus {
+  outline: 0;
+}
+
