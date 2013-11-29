@@ -25,9 +25,8 @@ Note the version is 0.0.1
 
 ## MDP TODOS
 - TESTS
+- Convert Page to Entry - Add folder and index file from slug name
 - Sorting Entries
-- Add better editor
-- Markdown Ghost or Medium editor 
 - Safe Delete
 - First Launch expierence
 - Deploy to Harp Platform
