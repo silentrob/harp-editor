@@ -38,6 +38,14 @@ app.configure(function() {
   app.engine('html', require('ejs').renderFile);
 });
 
+// editor.sections.fetchSection(cfg, function(sections) {
+// 	editor.sections.fetchMetaDataBySection('about', cfg, function(metaData, root) {
+// 		editor.sections.refineSection(sections['about'], metaData, cfg, function(r){
+// 			console.log(r);
+// 		});
+// 	});
+// });
+
 function checkAuth(req, res, next) {
   if (!req.session.user_id) {
     // res.redirect("/admin");
@@ -112,11 +120,13 @@ app.post("/admin/publish", checkAuth, function(req, res){
 
 });
 
+// editor.sections.fetchSectionsRefined(cfg, function(){});
+
 // Main content listing.
 app.get('/admin/content', checkAuth, function(req, res) {
 	editor.fetchFiles(cfg, function(files) {
 		var rfiles = editor.utils.filterEditableSync(files);
-		editor.fetchSection(cfg, function(sections) {
+		editor.sections.fetchSectionsRefined(cfg, function(sections) {
 			res.render("content", {nav:'content', files:rfiles, sections: sections});
 		});
 	});
@@ -208,8 +218,8 @@ app.post("/admin/member/new", checkAuth, function(req, res){
 
 // List section
 app.get("/admin/lists/:name", checkAuth, function(req, res){
-	editor.fetchSection(cfg, function(sections) {
-		editor.fetchMetaDataBySection(req.params.name, cfg, function(metaData, root) {
+	editor.sections.fetchSectionsRefined(cfg, function(sections) {
+		editor.sections.fetchMetaDataBySection(req.params.name, cfg, function(metaData, root) {
 			res.render("list", {nav:'content', list: req.params.name, listRoot:root, sections: sections, metaData: metaData});	
 		});
 	});

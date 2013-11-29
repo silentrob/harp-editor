@@ -4,6 +4,6 @@ nav.navbar.navbar-default(role="navigation")
 			a(href="/admin/content") Pages
 
 	ul.nav.navbar-nav
-		- for(var i = 0; i < Object.keys(sections).length;i++) 
+		- for(var i = 0; i < sections.length;i++) 
 			li(style="padding:0px 0px 0px 20px")
-				a(href="/admin/lists/#{Object.keys(sections)[i]}")= toUpperCase(Object.keys(sections)[i])
+				a(href="/admin/lists/#{sections[i]}")= toUpperCase(sections[i])

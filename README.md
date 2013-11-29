@@ -21,7 +21,6 @@ Note the version is 0.0.1
 - Add CLI to init 
 - Add Titles to content list
 - Filter entries out of pages
-- Filter out empty sections
 - delete _data files if you remove the last entry
 
 ## MDP TODOS
