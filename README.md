@@ -1,9 +1,9 @@
-# Harp Editor PREVIEW - PRE-ALPHA 
+# Harp Editor PREVIEW
 
-Adds ACL and other niceities to Harp Boilerplates.
+Adds Editor and CMS like Admin interface on top of any Harp Boilerplates.
 Built on top of Harp web server and uses best practices.
 
-Note the version is 0.0.0
+Note the version is 0.0.1
 
 	$ npm install
 	$ node server 
