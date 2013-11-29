@@ -143,4 +143,7 @@ body {
 .editable:focus {
   outline: 0;
 }
-
+.hb-content {
+  font-family:monospace;
+  padding:10px;
+}

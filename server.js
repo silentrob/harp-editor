@@ -38,18 +38,10 @@ app.configure(function() {
   app.engine('html', require('ejs').renderFile);
 });
 
-// editor.sections.fetchSection(cfg, function(sections) {
-// 	editor.sections.fetchMetaDataBySection('about', cfg, function(metaData, root) {
-// 		editor.sections.refineSection(sections['about'], metaData, cfg, function(r){
-// 			console.log(r);
-// 		});
-// 	});
-// });
-
 function checkAuth(req, res, next) {
   if (!req.session.user_id) {
-    // res.redirect("/admin");
-    next();
+    res.redirect("/admin");
+    // next();
   } else {
     next();
   }
@@ -213,13 +205,13 @@ app.post("/admin/member/new", checkAuth, function(req, res){
 		req.flash("error", "Username and password is required");
 		res.redirect("/admin/member/new")
 	}
-	
 });
 
 // List section
-app.get("/admin/lists/:name", checkAuth, function(req, res){
+app.get("/admin/lists/:name", checkAuth, function(req, res) {
 	editor.sections.fetchSectionsRefined(cfg, function(sections) {
 		editor.sections.fetchMetaDataBySection(req.params.name, cfg, function(metaData, root) {
+			console.log(metaData)
 			res.render("list", {nav:'content', list: req.params.name, listRoot:root, sections: sections, metaData: metaData});	
 		});
 	});

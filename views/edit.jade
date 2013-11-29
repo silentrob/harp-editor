@@ -47,7 +47,7 @@ block body
           - if (extension(file) != "md")
             .form-group
               label Page Content
-              textarea.js-content.form-control(name="content", rows="24",style="white-space: pre-wrap") #{contents}
+              textarea.js-content.hb-content.form-control(name="content", rows="24",style="white-space: pre-wrap") #{contents}
           - else
             input.js-content-hidden(type="hidden" name="content", value="")
             .editable.
@@ -61,7 +61,6 @@ block body
         var editor = new MediumEditor('.editable');
         $(".js-form").submit(function( event ) {
           event.preventDefault();
-
 
           if ($(".js-content").length != 0) {
             this.submit();
