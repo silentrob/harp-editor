@@ -130,9 +130,11 @@ app.get('/admin/content/new', checkAuth, function(req, res) {
 });
 
 app.del('/admin/content', checkAuth, function(req, res) {
-	var slug = editor.utils.normaizeFilePart(req.body.file)
-	var ext = editor.utils.getExtension(req.body.file);
-	var base = editor.utils.reduceFilePart(req.body.file);
+	var slug, ext, base;
+
+	slug = editor.utils.normaizeFilePart(req.body.file)
+	ext = editor.utils.getExtension(req.body.file);
+	base = editor.utils.reduceFilePart(req.body.file);
 
 	editor.removeFileBySlug(slug, base,  ext, cfg, function(fileContents) {
 		editor.removeMetaData(slug, base, cfg, function(err, result){
@@ -142,6 +144,8 @@ app.del('/admin/content', checkAuth, function(req, res) {
 });
 
 app.post('/admin/content/new', checkAuth, function(req, res) {
+	var data, slug, base;
+
 	if (req.body.slug == "") {
 		req.flash('error', 'Slug is required');
 		res.redirect("/admin/content/new?path=" + req.body.path);
@@ -149,7 +153,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 
 		// TODO - Does this slug exist already?
 
-		var data = {
+		data = {
 			type: "metadata",
 			title: req.body.title,
 			layout: req.body.layout,
@@ -157,8 +161,8 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 			updated_by: req.session.user_id || "Unknown User"
 		};
 
-		var slug = editor.utils.slug(req.body.slug);
-		var base = editor.utils.reduceFilePart(req.body.path);
+		slug = editor.utils.slug(req.body.slug);
+		base = editor.utils.reduceFilePart(req.body.path);
 
 		editor.updateMetaData(slug, base, cfg, data, function(err, result) {
 			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, req.body.content, function(fileContents) {

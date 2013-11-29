@@ -23,19 +23,19 @@ Note the version is 0.0.0
 - Filter entries out of pages
 - Filter out empty sections
 - delete _data files if you remove the last entry
-- Add inherited layouts to subfolders
 
 ## MDP TODOS
 - TESTS
 - Sorting Entries
 - Add better editor
+- Markdown Ghost or Medium editor 
 - Safe Delete
 - First Launch expierence
 - Deploy to Harp Platform
 - Workflow content management
 - Templates and guidlines
-- Markdown Ghost or Medium editor 
 - Image upload
+- Log activity
 
 
 # License (MIT)
