@@ -74,12 +74,14 @@ app.post("/admin/publish", checkAuth, function(req, res){
 	var content, data, ext, base;
 
 	data = {
-		type: "metadata",
 		title: req.body.title,
 		layout: req.body.layout,
 		updated_at: new Date(),
 		updated_by: req.session.user_id || "Unknown User"
 	};
+
+	data.layout = (data.layout == "true") ? true : data.layout;
+	data.layout = (data.layout == "false") ? false : data.layout;
 
 	// Write method needs to know the file extension, so we should pass in the origional
 	// If non exists, we can make a best guess or fall back to the system default
@@ -87,17 +89,16 @@ app.post("/admin/publish", checkAuth, function(req, res){
 	base = editor.utils.reduceFilePart(req.body.file);
 
 	if (ext == "md") {
-		// var html2markdown = require("html2markdown");
-		// content = html2markdown(req.body.content)
 		content = toMarkdown(req.body.content);
-		console.log("Converted", content)
 	} else {
 		contents = req.body.content;
 	}
 
+
 	editor.updateMetaData(req.body.slug, base, cfg, data, function(err, result){
 		editor.writeFileBySlug(req.body.slug, base, ext, cfg, content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
+			// If the slug has changed, we need to rename the file.
 			if(req.body.slug !== existingSlug) {
 			  editor.removeFileBySlug(existingSlug, base, ext, cfg, function(){
 			  	editor.removeMetaData(existingSlug, base, cfg, function(err, result){
@@ -162,6 +163,9 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 			updated_at: new Date(),
 			updated_by: req.session.user_id || "Unknown User"
 		};
+
+		data.layout = (data.layout == "true") ? true : data.layout;
+		data.layout = (data.layout == "false") ? false : data.layout;
 
 		slug = editor.utils.slug(req.body.slug);
 		base = editor.utils.reduceFilePart(req.body.path);

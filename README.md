@@ -16,11 +16,11 @@ Note the version is 0.0.1
 - Deployes to Harp Platform [Not done]
 
 ## Roadmap
+
 ### MVP TODOS aka current issues
 - Create Lists / Entries
 - Renaming files saves [Object]
 - Add CLI to init 
-- layout true / false should not be a string
 - Add Titles to content list
 - Filter entries out of pages ?
 - delete _data files if you remove the last entry
