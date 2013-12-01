@@ -20,15 +20,14 @@ Note the version is 0.0.1
 ### MVP TODOS aka current issues
 - Create Lists / Entries
 - Renaming files saves [Object]
-- Add CLI to init 
-- Add Titles to content list
+- Add CLI to init
 - Filter entries out of pages ?
-- delete _data files if you remove the last entry
 
 ### MDP TODOS
 - TESTS
 - Docs
 - Convert Page to Entry - Add folder and index file from slug name
+- Add Domain Settings for Harp Platform
 - Log activity
 - Sorting Entries
 - Safe Delete
@@ -37,6 +36,7 @@ Note the version is 0.0.1
 - Workflow content management
 - Templates and guidlines
 - Image upload
+- delete _data files if you remove the last entry
 
 
 # License (MIT)

@@ -1,0 +1,46 @@
+extends main_layout
+
+block append head
+  title Harp Editor - New Entry
+
+block body
+  include _shared/nav
+
+  .container(style="margin-top:15px;")
+    form.container(action="/admin/entry/new", method="post")
+      .row.hb-status-bar
+        .col-sm-9.hb-status-col
+          span New Entry in 
+          b= link(path)
+        .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
+          a(href="#")
+            i.glyphicon.glyphicon-plus.glyphicon-fw(style="margin-right:6px")
+            button.btn.btn-link Save Page
+
+       - if (message)
+          .row
+            .col-sm-12
+              p= message
+
+      input(type="hidden", name="section", value="#{path}")
+
+      .row
+        .col-sm-12
+          .form-group
+            label Slug
+            input.form-control(name="slug", value="")
+
+      each field, name in fields
+        .row
+          .col-sm-12
+            .form-group
+              label #{keyToTitle(field.name)}
+              - if (field.type == "textarea")
+                textarea.form-control(name="#{field.name}", rows="5" value="")
+              - else if (field.type == "text")
+                input.form-control(name="#{field.name}", value="")
+              - else if (field.type == "date")
+                input.form-control(name="#{field.name}", type="date", value="")
+
+
+      button.btn.btn-primary.pull-right Save 

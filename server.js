@@ -38,10 +38,11 @@ app.configure(function() {
   app.engine('html', require('ejs').renderFile);
 });
 
+
 function checkAuth(req, res, next) {
   if (!req.session.user_id) {
-    res.redirect("/admin");
-    // next();
+    // res.redirect("/admin");
+    next();
   } else {
     next();
   }
@@ -110,10 +111,7 @@ app.post("/admin/publish", checkAuth, function(req, res){
 			}
 		});
 	});
-
 });
-
-// editor.sections.fetchSectionsRefined(cfg, function(){});
 
 // Main content listing.
 app.get('/admin/content', checkAuth, function(req, res) {
@@ -211,11 +209,43 @@ app.post("/admin/member/new", checkAuth, function(req, res){
 	}
 });
 
+app.get("/admin/entry/new", checkAuth, function(req, res) {
+	editor.sections.fetchMetaDataBySection(req.query.path, cfg, function(metaData, root) {
+		var fields = editor.metadata.fetchFields(metaData);
+		res.render("entry_new", {fields:fields, path: req.query.path});
+	});
+});
+
+
+app.post("/admin/entry/new", checkAuth, function(req, res){
+	var data, slug, section;
+
+	slug = req.body.slug;
+	section = req.body.section;
+
+	delete req.body.slug;
+	delete req.body.section;
+
+	data = {
+		type: "entry",
+		updated_at: new Date(),
+		updated_by: req.session.user_id || "Unknown User"
+	};
+
+	data = editor.utils.extend(data, req.body);
+	slug = editor.utils.slug(slug);
+	
+	editor.sections.sectionToBase(section, cfg, function(base){
+		editor.updateMetaData(slug, base, cfg, data, function(err, result) {
+			res.redirect("/admin/lists/" + section);
+		});
+	});
+});
+
 // List section
 app.get("/admin/lists/:name", checkAuth, function(req, res) {
 	editor.sections.fetchSectionsRefined(cfg, function(sections) {
 		editor.sections.fetchMetaDataBySection(req.params.name, cfg, function(metaData, root) {
-			console.log(metaData)
 			res.render("list", {nav:'content', list: req.params.name, listRoot:root, sections: sections, metaData: metaData});	
 		});
 	});
