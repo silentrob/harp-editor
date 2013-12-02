@@ -218,13 +218,15 @@ app.get("/admin/entry/new", checkAuth, function(req, res) {
 
 
 app.post("/admin/entry/new", checkAuth, function(req, res){
-	var data, slug, section;
+	var data, slug, section, content;
 
-	slug = req.body.slug;
+	slug 		= editor.utils.slug(req.body.slug);
 	section = req.body.section;
+	content = toMarkdown(req.body.content);
 
 	delete req.body.slug;
 	delete req.body.section;
+	delete req.body.content;
 
 	data = {
 		type: "entry",
@@ -233,11 +235,12 @@ app.post("/admin/entry/new", checkAuth, function(req, res){
 	};
 
 	data = editor.utils.extend(data, req.body);
-	slug = editor.utils.slug(slug);
 	
-	editor.sections.sectionToBase(section, cfg, function(base){
+	editor.sections.sectionToBase(section, cfg, function(base) {
 		editor.updateMetaData(slug, base, cfg, data, function(err, result) {
-			res.redirect("/admin/lists/" + section);
+			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, content, function(fileContents) {
+				res.redirect("/admin/lists/" + section);
+			});
 		});
 	});
 });
