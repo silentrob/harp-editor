@@ -30,24 +30,46 @@ block body
             label Slug
             input.form-control(name="slug", value="")
 
-      each field, name in fields
+      -for (var i = 0; i < fields.length; i++)
+        -if (Object.keys(fields[i]) != "content")
+          .row
+            .col-sm-12
+              .form-group
+                -if (fields[i].label)
+                  label #{fields[i].label}
+                -else
+                  label #{keyToTitle(fields[i].name)}
+                - if (fields[i].type == "textarea")
+                  textarea.form-control(name="#{fields[i].name}", rows="5" value="")
+                - else if (fields[i].type == "text")
+                  input.form-control(name="#{fields[i].name}", value="")
+                - else if (fields[i].type == "date")
+                  input.form-control(name="#{fields[i].name}", type="date", value="")
+
+
+      -var showContent = true;
+      -for (var i = 0; i < fields.length; i++)
+        -if (Object.keys(fields[i]) == "content")
+          showContent = false
+          -if (fields[i].content === true)
+            .row
+              .col-sm-12
+                label Entry Content
+                input.js-content-hidden(type="hidden" name="content", value="")
+                .editable.
+          - else if(fields[i].content)
+            showContent = false
+
+
+      -if (showContent == true)
         .row
           .col-sm-12
-            .form-group
-              label #{keyToTitle(field.name)}
-              - if (field.type == "textarea")
-                textarea.form-control(name="#{field.name}", rows="5" value="")
-              - else if (field.type == "text")
-                input.form-control(name="#{field.name}", value="")
-              - else if (field.type == "date")
-                input.form-control(name="#{field.name}", type="date", value="")
+            label Entry Content
+            input.js-content-hidden(type="hidden" name="content", value="")
+            .editable.
 
-      .row
-        .col-sm-12
-          input.js-content-hidden(type="hidden" name="content", value="")
-          .editable.
 
-          button.btn.btn-primary.pull-right Save 
+      button.btn.btn-primary.pull-right Save 
 
     script.
       $(function() {

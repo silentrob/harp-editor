@@ -155,7 +155,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		// TODO - Does this slug exist already?
 
 		data = {
-			type: "metadata",
+			type: "page",
 			title: req.body.title,
 			layout: req.body.layout,
 			updated_at: new Date(),
