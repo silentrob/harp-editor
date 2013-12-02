@@ -18,7 +18,6 @@ Note the version is 0.0.1
 ## Roadmap
 
 ### MVP TODOS aka current issues
-- Create Lists / Entries
 - Renaming files saves [Object]
 - Add CLI to init
 - Filter entries out of pages ?

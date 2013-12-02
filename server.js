@@ -18,7 +18,7 @@ var projectPath = nodePath.resolve(process.cwd(), config.boilerplate || "");
 var cfg = editor.loadBoilerPlate(projectPath);
 
 app.configure(function() {
-  app.use(express.cookieParser('keyboard cat'));
+  app.use(express.cookieParser('play me off keyboard cat'));
   app.use(express.session({ secret: "keyboard cat", cookie: { maxAge: 1000*60*60*24*365 }}));
   app.use(flash());
 
