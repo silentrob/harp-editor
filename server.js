@@ -14,11 +14,11 @@ var app 					= express();
 var projectPath 	= nodePath.resolve(process.cwd(), config.boilerplate || "");
 
 // Existing
-var editor				= require('./lib/editor');
-var cfg = editor.loadBoilerPlate(projectPath);
+// var editor				= require('./lib/editor');
+// var cfg = editor.loadBoilerPlate(projectPath);
 
 // New
-// var editor				= require('./lib/editor')(projectPath);
+var editor				= require('./lib/editor')(projectPath);
 
 app.configure(function() {
   app.use(express.cookieParser('play me off keyboard cat'));
@@ -32,7 +32,7 @@ app.configure(function() {
 
   app.use(harp.mount(projectPath));
   app.use(express.static(__dirname + "/public"));
-  app.use(dynHelpers.helpers());
+  app.use(dynHelpers.helpers(editor));
 
   app.set("view engine", "jade");
   app.set('views', __dirname + '/views');
@@ -118,9 +118,9 @@ app.post("/admin/publish", checkAuth, function(req, res){
 
 // Main content listing.
 app.get('/admin/content', checkAuth, function(req, res) {
-	editor.fetchFiles(cfg, function(files) {
+	editor.files.fetch(function(files) {
 		var rfiles = editor.utils.filterEditableSync(files);
-		editor.sections.fetchSectionsRefined(cfg, function(sections) {
+		editor.sections.fetchSectionsRefined(function(sections) {
 			res.render("content", {nav:'content', files:rfiles, sections: sections});
 		});
 	});
