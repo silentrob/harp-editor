@@ -101,11 +101,11 @@ app.post("/admin/publish", checkAuth, function(req, res){
 
 
 	editor.metadata.updateMetaData(req.body.slug, base, data, function(err, result){
-		editor.writeFileBySlug(req.body.slug, base, ext, content, function(fileContents) {
+		editor.files.writeFileBySlug(req.body.slug, base, ext, content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			// If the slug has changed, we need to rename the file.
 			if(req.body.slug !== existingSlug) {
-			  editor.removeFileBySlug(existingSlug, base, ext, function(){
+			  editor.files.removeFileBySlug(existingSlug, base, ext, function(){
 			  	editor.metadata.removeMetaData(existingSlug, base, function(err, result){
 						res.redirect("/admin/content");
 					});
@@ -141,7 +141,7 @@ app.del('/admin/content', checkAuth, function(req, res) {
 	ext = editor.utils.getExtension(req.body.file);
 	base = editor.utils.reduceFilePart(req.body.file);
 
-	editor.removeFileBySlug(slug, base,  ext, function(fileContents) {
+	editor.files.removeFileBySlug(slug, base,  ext, function(fileContents) {
 		editor.metadata.removeMetaData(slug, base, function(err, result){
 			res.redirect("/admin/content");
 		});
@@ -173,7 +173,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		base = editor.utils.reduceFilePart(req.body.path);
 
 		editor.metadata.updateMetaData(slug, base, data, function(err, result) {
-			editor.writeFileBySlug(slug, base, config.defaultFileType, req.body.content, function(fileContents) {
+			editor.files.writeFileBySlug(slug, base, config.defaultFileType, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
 			});
 		});
@@ -242,7 +242,7 @@ app.post("/admin/entry/new", checkAuth, function(req, res){
 	
 	editor.sections.sectionToBase(section, function(base) {
 		editor.metadata.updateMetaData(slug, base, data, function(err, result) {
-			editor.writeFileBySlug(slug, base, config.defaultFileType, content, function(fileContents) {
+			editor.files.writeFileBySlug(slug, base, config.defaultFileType, content, function(fileContents) {
 				res.redirect("/admin/lists/" + section);
 			});
 		});
