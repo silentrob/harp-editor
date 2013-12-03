@@ -56,7 +56,7 @@ app.get('/admin', function(req, res){
 });
 
 app.get('/admin/publish', checkAuth, function(req, res) {
-	editor.fetchFileByPath(req.query.path, cfg, function(fileContents) {
+	editor.files.fetchFileByPath(req.query.path, function(fileContents) {
 		var base = editor.utils.reduceFilePart(req.query.path);
 		var ext = getExtension(req.query.path);
 
@@ -64,8 +64,9 @@ app.get('/admin/publish', checkAuth, function(req, res) {
 			fileContents = marked(fileContents);
 		} 
 
-		editor.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, cfg, function(err, metaData){
-			editor.layouts.fetchLayouts(cfg, function(err, layouts){
+		console.log(editor.metadata)
+		editor.metadata.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, function(err, metaData){
+			editor.layouts.fetchLayouts(function(err, layouts){
 				var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
 				res.render("edit", {nav:'content', file:req.query.path,  contents:fileContents, metaData: metaData, layouts:layouts});
 			});
@@ -99,13 +100,13 @@ app.post("/admin/publish", checkAuth, function(req, res){
 	}
 
 
-	editor.updateMetaData(req.body.slug, base, cfg, data, function(err, result){
-		editor.writeFileBySlug(req.body.slug, base, ext, cfg, content, function(fileContents) {
+	editor.metadata.updateMetaData(req.body.slug, base, data, function(err, result){
+		editor.writeFileBySlug(req.body.slug, base, ext, content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			// If the slug has changed, we need to rename the file.
 			if(req.body.slug !== existingSlug) {
-			  editor.removeFileBySlug(existingSlug, base, ext, cfg, function(){
-			  	editor.removeMetaData(existingSlug, base, cfg, function(err, result){
+			  editor.removeFileBySlug(existingSlug, base, ext, function(){
+			  	editor.metadata.removeMetaData(existingSlug, base, function(err, result){
 						res.redirect("/admin/content");
 					});
 			  });
@@ -127,7 +128,7 @@ app.get('/admin/content', checkAuth, function(req, res) {
 });
 
 app.get('/admin/content/new', checkAuth, function(req, res) {
-	editor.layouts.fetchLayouts(cfg, function(err, layouts){
+	editor.layouts.fetchLayouts(function(err, layouts){
 		var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
 		res.render("content_new",{nav:'content', message: req.flash('error'), layouts:layouts, path:req.query.path});
 	});
@@ -140,8 +141,8 @@ app.del('/admin/content', checkAuth, function(req, res) {
 	ext = editor.utils.getExtension(req.body.file);
 	base = editor.utils.reduceFilePart(req.body.file);
 
-	editor.removeFileBySlug(slug, base,  ext, cfg, function(fileContents) {
-		editor.removeMetaData(slug, base, cfg, function(err, result){
+	editor.removeFileBySlug(slug, base,  ext, function(fileContents) {
+		editor.metadata.removeMetaData(slug, base, function(err, result){
 			res.redirect("/admin/content");
 		});
 	});
@@ -171,8 +172,8 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		slug = editor.utils.slug(req.body.slug);
 		base = editor.utils.reduceFilePart(req.body.path);
 
-		editor.updateMetaData(slug, base, cfg, data, function(err, result) {
-			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, req.body.content, function(fileContents) {
+		editor.metadata.updateMetaData(slug, base, data, function(err, result) {
+			editor.writeFileBySlug(slug, base, config.defaultFileType, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
 			});
 		});
@@ -202,7 +203,7 @@ app.post("/admin/member/new", checkAuth, function(req, res){
 				password: passwordHash.generate(req.body.password1),
 				email: req.body.email
 			}
-			editor.addMember(cfg, data, function(){
+			editor.addMember(data, function(){
 				res.redirect("/admin/members")			
 			});
 		}
@@ -213,7 +214,7 @@ app.post("/admin/member/new", checkAuth, function(req, res){
 });
 
 app.get("/admin/entry/new", checkAuth, function(req, res) {
-	editor.sections.fetchMetaDataBySection(req.query.path, cfg, function(metaData, root) {
+	editor.sections.fetchMetaDataBySection(req.query.path, function(metaData, root) {
 		var fields = editor.metadata.fetchFields(metaData);
 		res.render("entry_new", {fields:fields, path: req.query.path});
 	});
@@ -239,9 +240,9 @@ app.post("/admin/entry/new", checkAuth, function(req, res){
 
 	data = editor.utils.extend(data, req.body);
 	
-	editor.sections.sectionToBase(section, cfg, function(base) {
-		editor.updateMetaData(slug, base, cfg, data, function(err, result) {
-			editor.writeFileBySlug(slug, base, config.defaultFileType, cfg, content, function(fileContents) {
+	editor.sections.sectionToBase(section, function(base) {
+		editor.metadata.updateMetaData(slug, base, data, function(err, result) {
+			editor.writeFileBySlug(slug, base, config.defaultFileType, content, function(fileContents) {
 				res.redirect("/admin/lists/" + section);
 			});
 		});
@@ -250,19 +251,19 @@ app.post("/admin/entry/new", checkAuth, function(req, res){
 
 // List section
 app.get("/admin/lists/:name", checkAuth, function(req, res) {
-	editor.sections.fetchSectionsRefined(cfg, function(sections) {
-		editor.sections.fetchMetaDataBySection(req.params.name, cfg, function(metaData, root) {
+	editor.sections.fetchSectionsRefined(function(sections) {
+		editor.sections.fetchMetaDataBySection(req.params.name, function(metaData, root) {
 			res.render("list", {nav:'content', list: req.params.name, listRoot:root, sections: sections, metaData: metaData});	
 		});
 	});
 });
 
 app.get('/admin/settings', function (req, res) {
-  res.render('settings', {nav:'settings', message: req.flash('info'), settings:cfg.harpJSON});
+  res.render('settings', {nav:'settings', message: req.flash('info'), settings:editor.harpJSON});
 });
 
 app.post("/admin/settings", function(req, res){
-	editor.updateGlobals(cfg, req.body, function(err, result){
+	editor.updateGlobals(req.body, function(err, result){
 		req.flash('info', 'Settings Saved');
 		res.redirect("/admin/settings");	
 	});
@@ -281,7 +282,7 @@ app.post('/admin/login', function(req, res){
 				password: passwordHash.generate(req.body.password)
 			}
 
-			editor.addMember(cfg, data, function(){
+			editor.addMember(data, function(){
 				req.session.user_id = req.body.username;
 				res.redirect("/admin/content");	
 			});
