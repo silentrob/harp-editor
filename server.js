@@ -1,21 +1,24 @@
 var express 			= require('express');
+var _ 		 				= require('underscore');
 var passwordHash 	= require('password-hash');
 var harp 					= require('harp');
 var nodePath 			= require('path');
-var _ 		 				= require('underscore');
 var busboy 				= require('connect-busboy');
 var marked				= require('marked');
 var toMarkdown 		= require('to-markdown').toMarkdown;
-
 var flash 				= require('connect-flash');
-var editor				= require('./lib/editor');
 var config 				= require('./config');
+var dynHelpers 		= require('./lib/helpers');
 var app 					= express();
 
-var dynamicHelpers = require("./lib/helpers");
+var projectPath 	= nodePath.resolve(process.cwd(), config.boilerplate || "");
 
-var projectPath = nodePath.resolve(process.cwd(), config.boilerplate || "");
+// Existing
+var editor				= require('./lib/editor');
 var cfg = editor.loadBoilerPlate(projectPath);
+
+// New
+// var editor				= require('./lib/editor')(projectPath);
 
 app.configure(function() {
   app.use(express.cookieParser('play me off keyboard cat'));
@@ -29,7 +32,7 @@ app.configure(function() {
 
   app.use(harp.mount(projectPath));
   app.use(express.static(__dirname + "/public"));
-  app.use(dynamicHelpers.helpers());
+  app.use(dynHelpers.helpers());
 
   app.set("view engine", "jade");
   app.set('views', __dirname + '/views');

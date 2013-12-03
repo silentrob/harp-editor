@@ -4,8 +4,9 @@
   "description": "A Editor built on top of Harp web server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --ignore-leaks -t 50000 -R list test"
   },
+
   "dependencies": {
     "harp": "*",
     "jade": "0.35.0",
@@ -26,5 +27,9 @@
   "repository": "",
   "author": "Rob Ellis",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "should": "~2.1.0",
+    "mocha": "~1.15.0"
+  }
 }
