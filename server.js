@@ -12,12 +12,6 @@ var dynHelpers 		= require('./lib/helpers');
 var app 					= express();
 
 var projectPath 	= nodePath.resolve(process.cwd(), config.boilerplate || "");
-
-// Existing
-// var editor				= require('./lib/editor');
-// var cfg = editor.loadBoilerPlate(projectPath);
-
-// New
 var editor				= require('./lib/editor')(projectPath);
 
 app.configure(function() {
@@ -64,7 +58,6 @@ app.get('/admin/publish', checkAuth, function(req, res) {
 			fileContents = marked(fileContents);
 		} 
 
-		console.log(editor.metadata)
 		editor.metadata.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, function(err, metaData){
 			editor.layouts.fetchLayouts(function(err, layouts){
 				var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
@@ -172,6 +165,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 		slug = editor.utils.slug(req.body.slug);
 		base = editor.utils.reduceFilePart(req.body.path);
 
+		
 		editor.metadata.updateMetaData(slug, base, data, function(err, result) {
 			editor.files.writeFileBySlug(slug, base, config.defaultFileType, req.body.content, function(fileContents) {
 				res.redirect("/admin/content");
@@ -181,7 +175,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 });
 
 app.get('/admin/members', checkAuth, function(req, res){
-	res.render("members", {nav:'members', members:cfg.harpJSON.users});
+	res.render("members", {nav:'members', members:editor.harpJSON.users});
 });
 
 app.get("/admin/member/new", checkAuth, function(req, res){
@@ -276,7 +270,7 @@ app.get('/admin/logout', function (req, res) {
 
 app.post('/admin/login', function(req, res){
 	if (req.body.username != "" && req.body.password != "") {
-		if (typeof cfg.harpJSON.users === 'undefined') {
+		if (typeof editor.harpJSON.users === 'undefined') {
 			var data = {
 				username: req.body.username,
 				password: passwordHash.generate(req.body.password)
@@ -289,9 +283,9 @@ app.post('/admin/login', function(req, res){
 			
 		} else {
 			var pass = false, user = null;
-			for (var i = 0; i < cfg.harpJSON.users.length; i++) {
-				if(cfg.harpJSON.users[i].username === req.body.username) {
-					if (passwordHash.verify(req.body.password, cfg.harpJSON.users[i].password) == true) {
+			for (var i = 0; i < editor.harpJSON.users.length; i++) {
+				if(editor.harpJSON.users[i].username === req.body.username) {
+					if (passwordHash.verify(req.body.password, editor.harpJSON.users[i].password) == true) {
 						pass = true;
 						user = req.body.username;
 					}

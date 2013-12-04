@@ -1,0 +1,30 @@
+{
+  "rss": {
+    "layout": false,
+    "type":"page"
+  },
+  "sample-blog-post": {
+    "title": "Sample Blog Post",
+    "date": "October 29, 2013",
+    "author": "ross-howard-jones",
+    "description": "Etiam porta sem malesuada magna mollis euismod. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus sagittis lacus vel augue laoreet."
+  },
+  "video-blog-post": {
+    "title": "Video Blog Post",
+    "date": "October 10, 2013",
+    "author": "ross-howard-jones",
+    "description": "Vestibulum id ligula porta felis euismod semper. Aenean lacinia bibendum nulla sed consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec sed odio dui."
+  },
+  "text-only-blog-post": {
+    "title": "Text Only Blog Post",
+    "date": "September 16, 2013",
+    "author": "brock-whitten",
+    "description": "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit. Cras mattis consectetur purus sit amet."
+  },
+  "code-in-a-post": {
+    "title": "Code in a Post",
+    "date": "August 9, 2013",
+    "author": "rob-ellis",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor."
+  }
+}

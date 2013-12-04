@@ -1,0 +1,26 @@
+{
+  "ross-howard-jones": {
+    "name": "Ross Howard Jones",
+    "about": "Is a User Interface Designer and photography enthusiast who lives in Vancouver, BC.",
+    "photo": "ross-howard-jones.jpg",
+    "twitter": "rosshj",
+    "google_plus": "https://plus.google.com/+RossHowardJones/posts",
+    "github": "rosshj"
+  },
+  "brock-whitten": {
+    "name": "Brock Whitten",
+    "about": "Author of Harp and Co-Creator of @PhoneGap. Mozilla-WebFWD Alumni and advocate of Open Web Standards.",
+    "photo": "brock-whitten.jpg",
+    "twitter": "sintaxi",
+    "google_plus": "https://plus.google.com/u/0/113761819438908788727/posts",
+    "github": "sintaxi"
+  },
+  "rob-ellis": {
+    "name": "Rob Ellis",
+    "about": "Co-Founder of HarpPlatorm, Chloi Inc, WebFWD Alumni. Co-Creator of PhoneGap, Making the Web better.",
+    "photo": "rob-ellis.jpg",
+    "twitter": "rob_ellis",
+    "google_plus": "https://plus.google.com/u/0/108202071101873494221/posts",
+    "github": "silentrob"
+  }
+}

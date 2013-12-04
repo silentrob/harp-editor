@@ -1,0 +1,320 @@
+global-reset()
+@import 'typography'
+@import '_nib'
+
+body
+  margin 0
+  padding 0 0 60px 0
+  background rgb(255,255,255)
+  @media (max-width: 768px)
+    padding 0 0 48px 0
+  @media (max-width: 568px)
+    padding 0 0 36px 0
+
+body.line-36
+  background-image url(/images/line-36.gif)
+  background-position center 31px
+  background-repeat repeat
+
+figure
+  margin 36px 0
+  figcaption
+    margin-top -36px
+    padding 36px
+    background rgb(242,242,242)
+    box-sizing border-box
+    @media (max-width: 768px)
+      margin-top -32px
+      padding 32px
+    @media (max-width: 768px)
+      margin-top -27px
+      padding 27px
+    @media (max-width: 568px)
+      margin-top -24px
+      padding 24px
+  @media (max-width: 768px)
+    margin 32px 0
+  @media (max-width: 768px)
+    margin 27px 0
+  @media (max-width: 568px)
+    margin 24px 0
+
+pre
+  padding 36px
+  background rgb(242,242,242)
+  box-sizing border-box
+  @media (max-width: 1023px)
+    padding 32px
+  @media (max-width: 768px)
+    padding 27px
+  @media (max-width: 568px)
+    padding 24px
+
+img
+  display block
+
+.container
+  width 980px
+  margin 0 auto
+  @media (max-width: 980px)
+    width 100%
+
+.masthead
+  // margin 0 0 60px 0
+  padding 5% 0
+  position relative
+  overflow hidden
+  .container
+    padding 6% 0
+    position relative
+    z-index 1
+    h1
+      margin 0
+      padding 0 5%
+  .img
+    top 0
+    bottom 0
+    left 0
+    right 0
+    position absolute
+  @media (max-width: 480px)
+    margin 0 0 5% 0
+@media (max-width: 768px)
+  .masthead
+    .container
+      padding 8% 0
+@media (max-width: 568px)
+  .masthead
+    .container
+      padding 10% 0
+.page-index
+  .masthead
+    .container
+      padding 12% 0
+
+section.page
+section.author
+article.post
+.articles
+  width 76%
+  margin 0 12%
+  article
+    margin 0 0 72px 0
+    a
+      display block
+      margin 0 0 0 -7%
+      padding 0 0 0 6%
+      border-left 6px solid rgb(255,255,255)
+      transition-property color, border-left-color
+      transition-duration 0.25s, 0.25s
+      animation-timing-function linear, linear
+      &:hover
+        border-left-color rgb(229,229,229)
+      img.author
+        float right
+        width 72px
+        height 72px
+        margin 0 0 0 36px
+        border-radius 50%
+        @media (max-width: 1023px)
+          width 60px
+          height 60px
+          margin 0 0 0 24px
+        @media (max-width: 768px)
+          width 48px
+          height 48px
+          margin 0 0 0 21px
+        @media (max-width: 568px)
+          width 36px
+          height 36px
+          margin 0 0 0 18px
+    &:last-child
+      margin-bottom 0
+      padding-bottom 0
+      border-bottom none
+    @media (max-width: 1023px)
+      margin 0 0 60px 0
+    @media (max-width: 768px)
+      margin 0 0 48px 0
+    @media (max-width: 568px)
+      margin 0 0 36px 0
+  @media (max-width: 480px)
+    width 86%
+    margin 0 7%
+section.page
+section.author
+article.post
+  a
+    border-bottom 1px solid rgba(0,0,0,.1)
+    transition-property color, border-bottom-color
+    transition-duration 0.25s, 0.25s
+    animation-timing-function linear, linear
+    &:hover
+      border-bottom-color rgb(0,0,0,1)
+      text-shadow 0 8px 0 rgba(255,255,255,0)
+section.author
+  img
+    width 200px
+    margin 0 auto
+    border-radius 50%
+  .articles
+    width 100%
+    margin 60px 0 0 0
+    padding 60px 0 0 0
+    border-top 1px solid rgb(229,229,229)
+    a
+      border-bottom none
+    @media (max-width: 1024px)
+      margin 48px 0 0 0
+      padding 48px 0 0 0
+    @media (max-width: 768px)
+      margin 36px 0 0 0
+      padding 36px 0 0 0
+    @media (max-width: 568px)
+      margin 27px 0 0 0
+      padding 27px 0 0 0
+
+aside.author
+  margin 60px 0 0 0
+  padding 60px 0 0 0
+  border-top 1px solid rgb(229,229,229)
+  img
+    width 100px
+    margin 0 auto
+    border-radius 50%
+  @media (max-width: 1023px)
+    margin 48px 0 0 0
+    padding 48px 0 0 0
+  @media (max-width: 768px)
+    margin 36px 0 0 0
+    padding 36px 0 0 0
+  @media (max-width: 568px)
+    margin 27px 0 0 0
+    padding 27px 0 0 0
+
+.comments
+  margin 60px 0 0 0
+  padding 60px 0 0 0
+  border-top 1px solid rgb(229,229,229)
+  @media (max-width: 1023px)
+    margin 48px 0 0 0
+    padding 48px 0 0 0
+  @media (max-width: 768px)
+    margin 36px 0 0 0
+    padding 36px 0 0 0
+  @media (max-width: 568px)
+    margin 27px 0 0 0
+    padding 27px 0 0 0
+    img
+      margin 0 24px 0 0
+
+.links
+  span
+    margin 0 .5em
+    @media (max-width: 568px)
+      margin 0 .25em
+
+
+img
+blockquote
+figcaption
+.embed
+  width 132%
+  margin 36px -16%
+  @media (max-width: 1023px)
+    width 124%
+    margin 32px -12%
+  @media (max-width: 768px)
+    width 120%
+    margin 27px -10%
+  @media (max-width: 568px)
+    width 110%
+    margin 24px -5%
+  @media (max-width: 480px)
+    width 108%
+    margin 24px -4%
+figure.left
+figure.right
+  img
+    width 100%
+    margin 36px 0
+    @media (max-width: 1023px)
+      margin 32px 0
+    @media (max-width: 768px)
+      margin 27px 0
+    @media (max-width: 568px)
+      margin 24px 0
+  figcaption
+    width 100%
+    margin -36px 0 36px 0
+    @media (max-width: 1023px)
+      margin -32px 0 32px 0
+    @media (max-width: 768px)
+      margin -27px 0 27px 0
+    @media (max-width: 568px)
+      margin -24px 0 24px 0
+
+.embed
+  height 0
+  overflow hidden
+  position relative
+  iframe
+  object
+  embed
+    width 100%
+    height 100%
+    top 0
+    left 0
+    position absolute
+.video
+  padding-top 74.25%
+  @media (max-width: 1023px)
+    padding-top 69.75%
+  @media (max-width: 768px)
+    padding-top 67.5%
+  @media (max-width: 568px)
+    padding-top 61.875%
+  @media (max-width: 480px)
+    padding-top 60.75%
+
+.left
+  float left
+  width 58%
+  margin 36px 36px 36px -16%
+  @media (max-width: 1023px)
+    width 56%
+    margin 27px 27px 27px -12%
+  @media (max-width: 768px)
+    width 55%
+    margin 32px 32px 32px -10%
+  @media (max-width: 568px)
+    float none
+    width 110%
+    margin 24px -5%
+  @media (max-width: 480px)
+    width 108%
+    margin 24px -4%
+.right
+  float right
+  width 58%
+  margin 36px -16% 36px 36px
+  @media (max-width: 1023px)
+    width 56%
+    margin 32px -12% 32px 32px
+  @media (max-width: 768px)
+    width 55%
+    margin 27px -10% 27px 27px
+  @media (max-width: 568px)
+    float none
+    width 110%
+    margin 24px -5%
+  @media (max-width: 480px)
+    width 108%
+    margin 24px -4%
+
+.clearfix:before
+.clearfix:after
+  content ""
+  display table
+.clearfix:after
+  clear both

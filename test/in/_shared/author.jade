@@ -1,0 +1,16 @@
+aside.center.author
+  img(src='/images/#{ public.authors._data[author].photo }', alt=public.authors._data[author].name)
+  h2.sm= public.authors._data[author].name
+  if public.authors._data[author].about
+    p= public.authors._data[author].about
+  p.links
+    a(href='/authors/#{ author }') Posts
+    if public.authors._data[author].twitter
+      span •
+      a(href='http://twitter.com/#{ public.authors._data[author].twitter }') Twitter
+    if public.authors._data[author].google_plus
+      span •
+      a(href='#{ public.authors._data[author].google_plus }') Google+
+    if public.authors._data[author].github
+      span •
+      a(href='https://github.com/#{ public.authors._data[author].github }') GitHub

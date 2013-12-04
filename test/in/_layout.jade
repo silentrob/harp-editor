@@ -1,0 +1,78 @@
+doctype 5
+html(lang="en")
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0')
+    title= locals.title ? title + " | " + site_title : site_title
+    if current.path[0] === "index"
+      meta(name='description', content=description)
+    else
+      if current.path[0] === "blog"
+        meta(name='description', content=description)
+    meta(property='og:title', content=locals.title ? title + " | " + site_title : site_title)
+    if current.path[0] === "index"
+      meta(property='og:type', content='website')
+      meta(property='og:description', content=description)
+      meta(property='og:url', content=site_url)
+    else
+      if current.path[0] === "blog"
+        meta(property='og:type', content='article')
+        meta(property='og:description', content=description)
+        meta(property='og:url', content=site_url + "/blog/" + current.path[1])
+    meta(property='og:image', content=site_url + logo)
+    meta(property='og:site_name', content=site_title)
+    meta(name='twitter:card', content='summary')
+    meta(name='twitter:site', content="@" + site_twitter)
+    if current.path[0] === "blog"
+      if public.authors._data[author].twitter
+        meta(name='twitter:creator', content="@" + public.authors._data[author].twitter)
+    meta(name='twitter:title', content=locals.title ? title + " | " + site_title : site_title)
+    meta(name='twitter:description', content=description)
+    meta(name='twitter:image', content=site_url + logo)
+    if current.path[0] === "blog"
+      if public.authors._data[author].google_plus
+        link(rel='author', href='#{ public.authors._data[author].google_plus }')
+    link(rel='shortcut icon', href='/favicon.ico')
+    link(rel='alternate', type='application/rss+xml', title=site_title + "RSS Feed", href='/blog/rss.xml')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic')
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lekton')
+    link(rel="stylesheet", href='/css/main.css')
+    //if lt IE 9
+      <script src="/js/html5shiv.js"></script>
+    script(type='text/javascript').
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '#{ locals.analytics_account }']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+  body(class="page-#{ current.path[0] } #{ current.path.join('-') }")
+    header.masthead
+      .container
+        h1
+          a(href='/')= site_title
+      .img
+    .content
+      .container
+        if current.path[0] === "index"
+          .articles
+            for post, slug in public.blog._data
+              if post.layout !== false
+                article
+                  a(href="/blog/#{ slug }")
+                    img(src='/images/#{ public.authors._data[post.author].photo }', alt='#{ public.authors._data[post.author].name }', class='author')
+                    h1.sm= post.title
+                    h2.xs.date #{ post.date } • by #{ public.authors._data[post.author].name }
+                    if post.description
+                      p= post.description
+          != yield
+        else
+          if current.path[0] === "blog"
+            != partial("/blog/_blog")
+          else if current.path[0] === "authors"
+            != partial("/authors/_author")
+          else 
+            section.page
+              != yield

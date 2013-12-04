@@ -1,0 +1,22 @@
+section.author
+  img(src='/images/#{ photo }', alt=name)
+  h1.center= name
+  if about
+    p.center= about
+  p.links.center
+    if public.authors._data[current.source].twitter
+      a(href='http://twitter.com/#{ public.authors._data[current.source].twitter }') Twitter
+    if public.authors._data[current.source].google_plus
+      span •
+      a(href='#{ public.authors._data[current.source].google_plus }') Google+
+    if public.authors._data[current.source].github
+      span •
+      a(href='https://github.com/#{ public.authors._data[current.source].github }') GitHub
+  .articles
+    for post, slug in public.blog._data
+      if post.author == current.source
+        article
+          a(href="/blog/#{ slug }")
+            h1.sm= post.title
+            h2.xs.date= post.date
+            p= post.description
