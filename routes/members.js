@@ -1,16 +1,28 @@
 module.exports = function(editor) {
 	return {
 
+		/**
+		 * Method: GET
+		 * Gets all members for index view
+		 */
 		getMembers: function(req, res){
 			editor.harp.getMembers(function(members){
 				res.render("members", {nav:'members', members:members });	
 			});
 		},
 
+		/**
+		 * Method: GET
+		 * This is the request to show a form to create a new member
+		 */
 		newMemberGet: function(req, res){
 			res.render("new_member", {nav:'members', message:req.flash("error")});
 		},
 
+		/**
+		 * Method: POST
+		 * This is the request to create a new member
+		 */
 		newMember: function(req, res){
 			if (req.body.username && req.body.password1) {
 				if (req.body.password1 !== req.body.password2) {

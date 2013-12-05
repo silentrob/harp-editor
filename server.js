@@ -17,6 +17,7 @@ var editor				= require('./lib/editor')(projectPath);
 // Routes
 var auth 					= require("./routes/auth")(editor);
 var members 			= require("./routes/members")(editor);
+var settings 			= require("./routes/settings")(editor);
 
 app.configure(function() {
   app.use(express.cookieParser('play me off keyboard cat'));
@@ -225,27 +226,18 @@ app.get("/admin/lists/:name", checkAuth, function(req, res) {
 	});
 });
 
-app.get('/admin/settings', function (req, res) {
-  res.render('settings', {nav:'settings', message: req.flash('info'), settings:editor.harpJSON});
-});
-
-app.post("/admin/settings", function(req, res){
-	editor.updateGlobals(req.body, function(err, result){
-		req.flash('info', 'Settings Saved');
-		res.redirect("/admin/settings");	
-	});
-});
-
+// Settings
+app.get("/admin/settings", checkAuth, settings.get);
+app.post("/admin/settings", checkAuth, settings.update);
 
 // Members
-app.get('/admin/members', checkAuth, members.getMembers);
+app.get("/admin/members", checkAuth, members.getMembers);
 app.get("/admin/member/new", checkAuth, members.newMemberGet);
 app.post("/admin/member/new", checkAuth, members.newMember);
 
 // Auth
-app.get('/admin/logout', auth.logout);
-app.post('/admin/login', auth.login);
-
+app.get("/admin/logout", auth.logout);
+app.post("/admin/login", auth.login);
 
 app.listen(config.port);
 console.log("Listening on Port", config.port)

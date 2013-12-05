@@ -17,13 +17,13 @@ block body
 
 
       form(action="/admin/settings", method="post")
-        each title, key in settings.globals
+        each title, key in globals
 
           .row
             .col-sm-12
               .form-group
                 label= keyToTitle(key)
-                input.form-control(name="#{key}", value="#{settings.globals[key]}")
+                input.form-control(name="#{key}", value="#{globals[key]}")
 
 
         .row
