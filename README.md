@@ -6,14 +6,17 @@ Built on top of Harp web server and uses best practices.
 Note the version is 0.0.1
 
 	$ npm install
-	$ node server 
+	$ node server
+
+Run tests - Edit /test/config.json
+	
+	$ npm test
 
 ## Features
 - Users
 - Admin Dashboard
 - Decorates JSON
 - Saves Locally
-- Deployes to Harp Platform [Not done]
 
 ## Roadmap
 
@@ -23,7 +26,6 @@ Note the version is 0.0.1
 - Filter entries out of pages ?
 
 ### MDP TODOS
-- TESTS
 - Docs
 - Convert Page to Entry - Add folder and index file from slug name
 - Add Domain Settings for Harp Platform
