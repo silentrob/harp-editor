@@ -14,6 +14,10 @@ var app 					= express();
 var projectPath 	= nodePath.resolve(process.cwd(), config.boilerplate || "");
 var editor				= require('./lib/editor')(projectPath);
 
+// Routes
+var auth 					= require("./routes/auth")(editor);
+var members 			= require("./routes/members")(editor);
+
 app.configure(function() {
   app.use(express.cookieParser('play me off keyboard cat'));
   app.use(express.session({ secret: "keyboard cat", cookie: { maxAge: 1000*60*60*24*365 }}));
@@ -174,38 +178,7 @@ app.post('/admin/content/new', checkAuth, function(req, res) {
 	}
 });
 
-app.get('/admin/members', checkAuth, function(req, res){
-	res.render("members", {nav:'members', members:editor.harpJSON.users});
-});
 
-app.get("/admin/member/new", checkAuth, function(req, res){
-	res.render("new_member", {nav:'members', message:req.flash("error")});
-});
-
-app.post("/admin/member/new", checkAuth, function(req, res){
-	console.log(req.body)
-	if (req.body.username && req.body.password1) {
-		if (req.body.password1 !== req.body.password2) {
-			req.flash("error", "Passwords don't match");
-			res.redirect("/admin/member/new")
-		} else {
-
-			var data = {
-				first_name: req.body.first_name,
-				last_name: req.body.last_name,
-				username: req.body.username,
-				password: passwordHash.generate(req.body.password1),
-				email: req.body.email
-			}
-			editor.addMember(data, function(){
-				res.redirect("/admin/members")			
-			});
-		}
-	} else {
-		req.flash("error", "Username and password is required");
-		res.redirect("/admin/member/new")
-	}
-});
 
 app.get("/admin/entry/new", checkAuth, function(req, res) {
 	editor.sections.fetchMetaDataBySection(req.query.path, function(metaData, root) {
@@ -263,48 +236,16 @@ app.post("/admin/settings", function(req, res){
 	});
 });
 
-app.get('/admin/logout', function (req, res) {
-  delete req.session.user_id;
-  res.redirect('/admin');
-});
 
-app.post('/admin/login', function(req, res){
-	if (req.body.username != "" && req.body.password != "") {
-		if (typeof editor.harpJSON.users === 'undefined') {
-			var data = {
-				username: req.body.username,
-				password: passwordHash.generate(req.body.password)
-			}
+// Members
+app.get('/admin/members', checkAuth, members.getMembers);
+app.get("/admin/member/new", checkAuth, members.newMemberGet);
+app.post("/admin/member/new", checkAuth, members.newMember);
 
-			editor.addMember(data, function(){
-				req.session.user_id = req.body.username;
-				res.redirect("/admin/content");	
-			});
-			
-		} else {
-			var pass = false, user = null;
-			for (var i = 0; i < editor.harpJSON.users.length; i++) {
-				if(editor.harpJSON.users[i].username === req.body.username) {
-					if (passwordHash.verify(req.body.password, editor.harpJSON.users[i].password) == true) {
-						pass = true;
-						user = req.body.username;
-					}
-				}
-			}
+// Auth
+app.get('/admin/logout', auth.logout);
+app.post('/admin/login', auth.login);
 
-			if (pass) {
-				req.session.user_id = user;
-				res.redirect("/admin/content");
-			} else {
-				req.flash('error', 'Invalid Username or Password');
-				res.redirect("/admin");				
-			}
-		}
-	} else {
-		req.flash('error', 'Username and Password are required');
-		res.redirect("/admin");
-	}
-});
 
 app.listen(config.port);
 console.log("Listening on Port", config.port)
