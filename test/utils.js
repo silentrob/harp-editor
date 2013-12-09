@@ -1,5 +1,20 @@
 var should 	= require("should");
 var utils 	= require("../lib/utils");
+var fse 		= require("fs-extra");
+var path 		= require('path');
+
+var config 				= require('./config/config');
+
+var inDir = path.resolve(process.cwd(), "test", "in");
+var outDir = path.resolve(process.cwd(), "test", "out");
+var editor;
+
+before(function(done){
+	fse.copy(inDir, outDir, function(){
+		editor = require('../lib/editor')(config.boilerplate);
+		done();
+	});
+});
 
 describe('Utils', function(){
 
@@ -72,6 +87,9 @@ describe('Utils', function(){
 			utils.filterEditableSync(files).should.eql(['readme.md']);
     });
   });
-  
+ 
+});
 
+after(function(done){
+	fse.remove(outDir, done);
 });

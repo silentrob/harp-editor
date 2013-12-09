@@ -30,6 +30,7 @@
   "readmeFilename": "README.md",
   "devDependencies": {
     "should": "~2.1.0",
-    "mocha": "~1.15.0"
+    "mocha": "~1.15.0",
+    "fs-extra": "~0.8.1"
   }
 }

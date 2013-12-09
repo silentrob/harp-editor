@@ -52,6 +52,7 @@ block body
             input.js-content-hidden(type="hidden" name="content", value="")
             .editable.
               !{contents}
+              !{JSON.stringify(contents, null, 2)}
 
           button.btn.btn-primary.pull-right Save 
 

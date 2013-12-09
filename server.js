@@ -7,6 +7,7 @@ var busboy 				= require('connect-busboy');
 var marked				= require('marked');
 var toMarkdown 		= require('to-markdown').toMarkdown;
 var flash 				= require('connect-flash');
+var debug					= require('debug')('app');
 var config 				= require('./config');
 var dynHelpers 		= require('./lib/helpers');
 var app 					= express();
@@ -58,15 +59,14 @@ app.get('/admin/publish', checkAuth, function(req, res) {
 	editor.files.fetchFileByPath(req.query.path, function(fileContents) {
 		var base = editor.utils.reduceFilePart(req.query.path);
 		var ext = getExtension(req.query.path);
-
 		if (ext == "md") {
 			fileContents = marked(fileContents);
 		} 
-
 		editor.metadata.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, function(err, metaData){
-			editor.layouts.fetchLayouts(function(err, layouts){
+			editor.layouts.fetchLayouts(function(err, layouts) {
 				var layouts = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
-				res.render("edit", {nav:'content', file:req.query.path,  contents:fileContents, metaData: metaData, layouts:layouts});
+				console.log(fileContents)
+				res.render("edit", {nav:'content', file:req.query.path, 'contents':fileContents, 'metaData': metaData, 'layouts':layouts});
 			});
 		});
 	});
@@ -97,12 +97,12 @@ app.post("/admin/publish", checkAuth, function(req, res){
 		contents = req.body.content;
 	}
 
-
 	editor.metadata.updateMetaData(req.body.slug, base, data, function(err, result){
 		editor.files.writeFileBySlug(req.body.slug, base, ext, content, function(fileContents) {
 			var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 			// If the slug has changed, we need to rename the file.
 			if(req.body.slug !== existingSlug) {
+				debug("Renaming event", req.body.slug, existingSlug);
 			  editor.files.removeFileBySlug(existingSlug, base, ext, function(){
 			  	editor.metadata.removeMetaData(existingSlug, base, function(err, result){
 						res.redirect("/admin/content");

@@ -21,7 +21,7 @@ Run tests - Edit /test/config.json
 ## Roadmap
 
 ### MVP TODOS aka current issues
-- Renaming files saves [Object]
+- Renaming files shows [Object]
 - Add CLI to init
 - Filter entries out of pages ?
 
