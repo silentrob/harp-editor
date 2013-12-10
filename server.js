@@ -1,15 +1,12 @@
-
 var express       = require('express');
 var _             = require('underscore');
-var passwordHash  = require('password-hash');
 var harp          = require('harp');
 var nodePath      = require('path');
 var busboy        = require('connect-busboy');
-var marked        = require('marked');
-var toMarkdown    = require('to-markdown').toMarkdown;
 var flash         = require('connect-flash');
 var debug         = require('debug')('app');
 var config        = require('./config');
+
 var dynHelpers    = require('./lib/helpers');
 var app           = express();
 
@@ -49,8 +46,6 @@ function checkAuth(req, res, next) {
     next();
   }
 }
-
-
 
 // Pages Resource
 // TODO - Rename these routes to pages
@@ -105,5 +100,6 @@ app.get('/admin', auth.new);
 app.get("/admin/logout", auth.logout);
 app.post("/admin/login", auth.login);
 
+// App Startup
 app.listen(config.port);
 console.log("Listening on Port", config.port);

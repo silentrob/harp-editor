@@ -1,3 +1,6 @@
+var marked        = require('marked');
+var toMarkdown    = require('to-markdown').toMarkdown;
+
 module.exports = function(editor, config) {
 	return {
 
