@@ -9,18 +9,24 @@ block body
 
   .container(style="margin-top:15px;")
     .row.hb-status-bar
-      .col-sm-9.hb-status-col
+      .col-sm-8.hb-status-col
         span Viewing list 
         b= list
       .col-sm-3.hb-status-col(style="border-left:1px solid #efefef;")
         a(href="/admin/entry/new?path=#{list}")
           i.glyphicon.glyphicon-plus.glyphicon-fw(style="margin-right:6px") 
           | New Entry
+      //- TODO IF ADMIN
+      .col-sm-1.hb-status-col(style="border-left:1px solid #efefef;text-align:center")
+        a(href="/admin/lists/#{list}/edit")
+          i.glyphicon.glyphicon-cog.glyphicon-fw(style="margin-right:6px")
+          
+
 
     .row
       table#hb-table.hb-table.table.table-hover
         //- Custom Headers provided in _data
-        if (metaData['editor'] && metaData['editor'].table)
+        if (metaData['editor'] && metaData['editor'].table && metaData['editor'].table.length != 0)
           thead
             tr
               -for (var i = 0; i < metaData['editor'].table.length; i++)

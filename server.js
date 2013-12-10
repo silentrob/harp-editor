@@ -226,6 +226,32 @@ app.get("/admin/lists/:name", checkAuth, function(req, res) {
 	});
 });
 
+// List section editor
+// This is for editing the editor Metadata
+// TODO should be ADMIN only
+app.get("/admin/lists/:name/edit", checkAuth, function(req, res) {
+	editor.sections.fetchSectionsRefined(function(sections) {
+		editor.sections.fetchMetaDataBySection(req.params.name, function(metaData, root) {
+			
+			var fields = editor.metadata.fetchFields(metaData);
+			var table = (metaData.editor && metaData.editor.table) ? metaData.editor.table : []
+		
+			res.render("list_edit", {nav:'content', table:table,  fields: fields, list: req.params.name, sections: sections});	
+			
+		});
+	});
+});
+
+app.post("/admin/lists/:name/edit/table", checkAuth, function(req, res) {	
+	editor.sections.sectionToBase(req.params.name, function(base) {
+
+		editor.metadata.updateTableFields(base, req.body, function(err, result){
+			res.redirect("/admin/lists/" + req.params.name );	
+		});
+
+	});
+});
+
 // Settings
 app.get("/admin/settings", checkAuth, settings.get);
 app.post("/admin/settings", checkAuth, settings.update);
