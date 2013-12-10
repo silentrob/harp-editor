@@ -1,9 +1,7 @@
-# Harp Editor PREVIEW
+# Harp Editor
 
 Adds Editor and CMS like Admin interface on top of any Harp Boilerplates.
 Built on top of Harp web server and uses best practices.
-
-Note the version is 0.0.1
 
 	$ npm install
 	$ node server
@@ -21,11 +19,13 @@ Run tests - Edit /test/config.json
 ## Roadmap
 
 ### MVP TODOS aka current issues
-- Add CLI to init
-- Filter entries out of pages ?
+- Add CLI to init (replace config.boilerplate with CLI args)
+- Entry Editor needs to support content
+- Member needs `admin`
 
 ### MDP TODOS
 - Docs
+- Better Content Edit Expierence
 - Convert Page to Entry - Add folder and index file from slug name
 - Add Domain Settings for Harp Platform
 - Log activity
