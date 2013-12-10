@@ -7,7 +7,7 @@ module.exports = function(editor) {
      */
     get: function (req, res) {
       editor.harp.getGlobals(function(err, globals) {
-        res.render('settings', {nav:'settings', message: req.flash('info'), globals:globals});
+        res.render('settings/get', {nav:'settings', message: req.flash('info'), globals:globals});
       });
     },
 
