@@ -50,6 +50,22 @@ describe('files', function(){
 	 	});
   });
 
+  describe('#fetchFileByPath()', function(){
+  	it('editor.metadata.fetchFileByPath() should read a file', function(done){
+	  	editor.files.fetchFileByPath("/new_file_test.md", function(contents){
+	  		console.log(contents)
+	  		done();
+	  		// contents.should.be.an.String;
+	  		// contents.should.eql("Testing");
+	  		// editor.files.fetch(function(files){
+	  		// 	files.should.have.length(31);
+	  		// 	done();
+	  		// });
+	  	})
+	 	});
+  });
+
+
 
   describe('#removeFileBySlug()', function(){
   	it('editor.metadata.removeFileBySlug() should write a new file', function(done){

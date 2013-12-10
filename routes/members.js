@@ -27,7 +27,7 @@ module.exports = function(editor) {
 			if (req.body.username && req.body.password1) {
 				if (req.body.password1 !== req.body.password2) {
 					req.flash("error", "Passwords don't match");
-					res.redirect("/admin/member/new")
+					res.redirect("/admin/member/new");
 				} else {
 
 					var data = {
@@ -36,15 +36,17 @@ module.exports = function(editor) {
 						username: req.body.username,
 						password: req.body.password1,
 						email: req.body.email
-					}
+					};
+
 					editor.harp.addMember(data, function(){
-						res.redirect("/admin/members")			
+						res.redirect("/admin/members");
 					});
+
 				}
 			} else {
 				req.flash("error", "Username and password is required");
-				res.redirect("/admin/member/new")
+				res.redirect("/admin/member/new");
 			}
 		}
-	}
-}
+	};
+};
