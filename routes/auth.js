@@ -2,6 +2,10 @@ var passwordHash  = require('password-hash');
 
 module.exports = function(editor) {
   return {
+    new: function(req, res){
+      res.render("auth/new", { message: req.flash('error') });
+    },
+
     logout: function (req, res) {
       delete req.session.user_id;
       res.redirect('/admin');

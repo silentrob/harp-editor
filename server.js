@@ -50,9 +50,6 @@ function checkAuth(req, res, next) {
   }
 }
 
-app.get('/admin', function(req, res){
-  res.render("login", { message: req.flash('error') });
-});
 
 
 // Pages Resource
@@ -104,6 +101,7 @@ app.get("/admin/member/new", checkAuth, members.get);
 app.post("/admin/member/new", checkAuth, members.new);
 
 // Auth
+app.get('/admin', auth.new);
 app.get("/admin/logout", auth.logout);
 app.post("/admin/login", auth.login);
 
