@@ -5,7 +5,7 @@ module.exports = function(editor, config) {
 		  editor.files.fetch(function(files) {
 		    var rfiles = editor.utils.filterEditableSync(files);
 		    editor.sections.fetchSectionsRefined(function(sections) {
-		      res.render("content", {nav:'content', files:rfiles, sections: sections});
+		      res.render("pages/all", {nav:'content', files:rfiles, sections: sections});
 		    });
 		  });
 		},
@@ -88,7 +88,7 @@ module.exports = function(editor, config) {
 		new: function(req, res) {
 		  editor.layouts.fetchLayouts(function(err, layouts){
 		    var layoutSelect = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
-		    res.render("content_new",{nav:'content', message: req.flash('error'), layouts:layoutSelect, path:req.query.path});
+		    res.render("pages/new",{nav:'content', message: req.flash('error'), layouts:layoutSelect, path:req.query.path});
 		  });
 		},
 
@@ -102,7 +102,7 @@ module.exports = function(editor, config) {
 		    editor.metadata.getMetaData(editor.utils.normaizeFilePartExt(req.query.path), base, function(err, metaData){
 		      editor.layouts.fetchLayouts(function(err, layouts) {
 		        var layoutSelect = editor.layouts.layoutsForSelect(editor.layouts.layoutsForScope(layouts, req.query.path));
-		        res.render("edit", {nav:'content', file:req.query.path, 'contents':fileContents, 'metaData': metaData, 'layouts':layoutSelect});
+		        res.render("pages/edit", {nav:'content', file:req.query.path, 'contents':fileContents, 'metaData': metaData, 'layouts':layoutSelect});
 		      });
 		    });
 		  });

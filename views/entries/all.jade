@@ -1,11 +1,11 @@
-extends main_layout
+extends ../main_layout
 
 block append head
   title Harp Editor - List
 
 block body
-  include _shared/nav
-  include _shared/content_nav
+  include ../_shared/nav
+  include ../_shared/content_nav
 
   .container(style="margin-top:15px;")
     .row.hb-status-bar
@@ -20,8 +20,6 @@ block body
       .col-sm-1.hb-status-col(style="border-left:1px solid #efefef;text-align:center")
         a(href="/admin/lists/#{list}/edit")
           i.glyphicon.glyphicon-cog.glyphicon-fw(style="margin-right:6px")
-          
-
 
     .row
       table#hb-table.hb-table.table.table-hover

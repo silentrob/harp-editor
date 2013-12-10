@@ -1,10 +1,10 @@
-extends main_layout
+extends ../main_layout
 
 block append head
   title Harp Editor - Edit File
 
 block body
-  include _shared/nav
+  include ../_shared/nav
 
   .container(style="margin-top:15px;")
     form.js-form.container(action="/admin/publish", method="post")
@@ -16,7 +16,6 @@ block body
           a(href="#")
             i.glyphicon.glyphicon-plus.glyphicon-fw(style="margin-right:6px")
             button.btn.btn-link Save Page
-
 
       input(type="hidden", name="file", value="#{file}")
       .row

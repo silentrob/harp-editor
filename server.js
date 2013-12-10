@@ -60,54 +60,15 @@ app.get('/admin', function(req, res){
 app.get('/admin/content', checkAuth, pages.all);
 app.get('/admin/content/new', checkAuth, pages.new);
 app.post('/admin/content/new', checkAuth, pages.create);
-app.post("/admin/publish", checkAuth, pages.update);
+app.post('/admin/publish', checkAuth, pages.update);
 app.get('/admin/publish', checkAuth, pages.edit);
 app.del('/admin/content', checkAuth, pages.del);
 
 // Entries
-app.get("/admin/entry/new", checkAuth, function(req, res) {
-  editor.sections.fetchMetaDataBySection(req.query.path, function(metaData, root) {
-    var fields = editor.metadata.fetchFields(metaData);
-    res.render("entry_new", {fields:fields, path: req.query.path});
-  });
-});
+app.get("/admin/lists/:name", checkAuth, entries.all);
+app.get("/admin/entry/new", checkAuth, entries.new);
+app.post("/admin/entry/new", checkAuth, entries.create);
 
-app.post("/admin/entry/new", checkAuth, function(req, res){
-  var data, slug, section, content;
-
-  slug    = editor.utils.slug(req.body.slug);
-  section = req.body.section;
-  content = toMarkdown(req.body.content);
-
-  delete req.body.slug;
-  delete req.body.section;
-  delete req.body.content;
-
-  data = {
-    type: "entry",
-    updated_at: new Date(),
-    updated_by: req.session.user_id || "Unknown User"
-  };
-
-  data = editor.utils.extend(data, req.body);
-  
-  editor.sections.sectionToBase(section, function(base) {
-    editor.metadata.updateMetaData(slug, base, data, function(err, result) {
-      editor.files.writeFileBySlug(slug, base, config.defaultFileType, content, function(fileContents) {
-        res.redirect("/admin/lists/" + section);
-      });
-    });
-  });
-});
-
-// List section
-app.get("/admin/lists/:name", checkAuth, function(req, res) {
-  editor.sections.fetchSectionsRefined(function(sections) {
-    editor.sections.fetchMetaDataBySection(req.params.name, function(metaData, root) {
-      res.render("list", {nav:'content', list: req.params.name, listRoot:root, sections: sections, metaData: metaData});  
-    });
-  });
-});
 
 // List section editor
 // This is for editing the editor Metadata
@@ -119,7 +80,7 @@ app.get("/admin/lists/:name/edit", checkAuth, function(req, res) {
       var fields = editor.metadata.fetchFields(metaData);
       var table = (metaData.editor && metaData.editor.table) ? metaData.editor.table : [];
     
-      res.render("list_edit", {nav:'content', table:table,  fields: fields, list: req.params.name, sections: sections});  
+      res.render("entries/list_edit", {nav:'content', table:table,  fields: fields, list: req.params.name, sections: sections});  
       
     });
   });
@@ -127,11 +88,9 @@ app.get("/admin/lists/:name/edit", checkAuth, function(req, res) {
 
 app.post("/admin/lists/:name/edit/table", checkAuth, function(req, res) { 
   editor.sections.sectionToBase(req.params.name, function(base) {
-
     editor.metadata.updateTableFields(base, req.body, function(err, result){
       res.redirect("/admin/lists/" + req.params.name ); 
     });
-
   });
 });
 
