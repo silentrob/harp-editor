@@ -40,8 +40,8 @@ app.configure(function () {
 
 function checkAuth(req, res, next) {
   if (!req.session.user_id) {
-    res.redirect("/admin");
-    // next();
+    // res.redirect("/admin");
+    next();
   } else {
     next();
   }

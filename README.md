@@ -10,11 +10,22 @@ Run tests - Edit /test/config.json
 	
 	$ npm test
 
+## Screenshot
+![Screenshot](screenshot.png)
+
 ## Features
-- Users
+- User Management and Auth
 - Admin Dashboard
-- Decorates JSON
+- Decorates Editor
 - Saves Locally
+- Provides File History
+
+## Setup
+1. Clone or download Repo
+2. Install Deplenancies: npm install
+3. Edit config.json to point to your existing boilerplate
+4. Start Server: node server.js
+5. Visit Server at: http://localhost:3000
 
 ## Roadmap
 
