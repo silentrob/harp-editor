@@ -49,6 +49,7 @@ describe('Utils', function(){
 			(function(){ utils.getExtension(undefined); }).should.throw();
 			utils.getExtension("foo.md").should.eql("md");
 			utils.getExtension("/bar/foo.md").should.eql("md");
+			utils.getExtension("/blog/rss.xml.jade").should.eql("xml.jade");
     });
   });
 
@@ -67,6 +68,7 @@ describe('Utils', function(){
 			utils.normaizeFilePart("foo.md").should.eql("foo");
 			utils.normaizeFilePart("/bar/foo.md").should.eql("foo");
 			utils.normaizeFilePart("/bar/foo/baz.md").should.eql("baz");
+			utils.normaizeFilePart("/blog/rss.xml.jade").should.eql("rss");
     });
   });
 
