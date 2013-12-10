@@ -18,6 +18,25 @@ block body
             button.btn.btn-link Save Page
 
       input(type="hidden", name="file", value="#{file}")
+
+      .row
+        .col-sm-12
+          .form-group
+            label Type
+
+            select(name="type").form-control
+              - if (metaData.type === "")
+                option(value="", selected='selected') Unknown
+              - else 
+                option(value="") Unknown
+              - if (metaData.type === "page")
+                option(value="page", selected='selected') Page
+              - else 
+                option(value="page") Page
+              - if (metaData.type === "entry")
+                option(value="entry", selected='selected') Entry
+              - else
+                option(value="entry") Entry
       .row
         .col-sm-12
           .form-group

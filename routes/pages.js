@@ -60,6 +60,10 @@ module.exports = function(editor, config) {
 		  data.layout = (data.layout == "true") ? true : data.layout;
 		  data.layout = (data.layout == "false") ? false : data.layout;
 
+		  if (req.body.type != "") {
+		  	data.type = req.body.type;
+		  }
+
 		  // Write method needs to know the file extension, so we should pass in the origional
 		  // If non exists, we can make a best guess or fall back to the system default
 		  ext = editor.utils.getExtension(req.body.file);

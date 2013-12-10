@@ -32,7 +32,7 @@ block body
               th View
           each obj, dataKey in metaData
             tbody
-              if (obj.type != "metadata" && dataKey != "editor")
+              if (obj.type != "page" && dataKey != "editor")
                 tr
                   -for (var i = 0; i < metaData['editor'].table.length; i++)
                     - var column = metaData['editor'].table[i];
