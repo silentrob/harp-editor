@@ -1,10 +1,10 @@
-extends main_layout
+extends ../main_layout
 
 block append head
   title Harp Editor - New Member
 
 block body
-  include _shared/nav
+  include ../_shared/nav
 
   .container
     form(action="/admin/member/new", method="post")

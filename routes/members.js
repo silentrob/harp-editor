@@ -5,9 +5,9 @@ module.exports = function(editor) {
 		 * Method: GET
 		 * Gets all members for index view
 		 */
-		getMembers: function(req, res){
+		all: function(req, res){
 			editor.harp.getMembers(function(err, members){
-				res.render("members", {nav:'members', members:members });	
+				res.render("members/all", {nav:'members', members:members });	
 			});
 		},
 
@@ -15,15 +15,15 @@ module.exports = function(editor) {
 		 * Method: GET
 		 * This is the request to show a form to create a new member
 		 */
-		newMemberGet: function(req, res){
-			res.render("new_member", {nav:'members', message:req.flash("error")});
+		get: function(req, res){
+			res.render("members/new", {nav:'members', message:req.flash("error")});
 		},
 
 		/**
 		 * Method: POST
 		 * This is the request to create a new member
 		 */
-		newMember: function(req, res){
+		new: function(req, res){
 			if (req.body.username && req.body.password1) {
 				if (req.body.password1 !== req.body.password2) {
 					req.flash("error", "Passwords don't match");

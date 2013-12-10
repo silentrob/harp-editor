@@ -41,8 +41,8 @@ app.configure(function () {
 
 function checkAuth(req, res, next) {
   if (!req.session.user_id) {
-    res.redirect("/admin");
-    // next();
+    // res.redirect("/admin");
+    next();
   } else {
     next();
   }
@@ -253,9 +253,9 @@ app.get("/admin/settings", checkAuth, settings.get);
 app.post("/admin/settings", checkAuth, settings.update);
 
 // Members
-app.get("/admin/members", checkAuth, members.getMembers);
-app.get("/admin/member/new", checkAuth, members.newMemberGet);
-app.post("/admin/member/new", checkAuth, members.newMember);
+app.get("/admin/members", checkAuth, members.all);
+app.get("/admin/member/new", checkAuth, members.get);
+app.post("/admin/member/new", checkAuth, members.new);
 
 // Auth
 app.get("/admin/logout", auth.logout);
