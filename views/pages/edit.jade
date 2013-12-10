@@ -44,7 +44,7 @@ block body
 
       .row
         .col-sm-12
-          - if (extension(file) != "md")
+          - if (extension(file) !== "md")
             .form-group
               label Page Content
               textarea.js-content.hb-content.form-control(name="content", rows="24",style="white-space: pre-wrap") #{contents}
@@ -52,7 +52,6 @@ block body
             input.js-content-hidden(type="hidden" name="content", value="")
             .editable.
               !{contents}
-              !{JSON.stringify(contents, null, 2)}
 
           button.btn.btn-primary.pull-right Save 
 

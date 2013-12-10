@@ -1,5 +1,6 @@
 var marked        = require('marked');
 var toMarkdown    = require('to-markdown').toMarkdown;
+var debug         = require('debug')('app:pages');
 
 module.exports = function(editor, config) {
 	return {
@@ -75,7 +76,6 @@ module.exports = function(editor, config) {
 		      var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 		      // If the slug has changed, we need to rename the file.
 		      if(req.body.slug !== existingSlug) {
-		        debug("Renaming event", req.body.slug, existingSlug);
 		        editor.files.removeFileBySlug(existingSlug, base, ext, function(){
 		          editor.metadata.removeMetaData(existingSlug, base, function(err, result){
 		            res.redirect("/admin/content");
