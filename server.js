@@ -65,7 +65,7 @@ app.post("/admin/entry/new", checkAuth, entries.create);
 // List section editor
 // This is for editing the editor Metadata
 // TODO should be ADMIN only
-app.get("/admin/lists/:name/edit", checkAuth, function(req, res) {
+app.get("/admin/entries/:name/edit", checkAuth, function(req, res) {
   editor.sections.fetchSectionsRefined(function(sections) {
     editor.sections.fetchMetaDataBySection(req.params.name, function(metaData, root) {
       
@@ -78,7 +78,16 @@ app.get("/admin/lists/:name/edit", checkAuth, function(req, res) {
   });
 });
 
-app.post("/admin/lists/:name/edit/table", checkAuth, function(req, res) { 
+app.post("/admin/entries/:name/edit/table", checkAuth, function(req, res) { 
+  editor.sections.sectionToBase(req.params.name, function(base) {
+    editor.metadata.updateTableFields(base, req.body, function(err, result){
+      res.redirect("/admin/lists/" + req.params.name ); 
+    });
+  });
+});
+
+app.post("/admin/entries/:name/edit/content", checkAuth, function(req, res) { 
+
   editor.sections.sectionToBase(req.params.name, function(base) {
     editor.metadata.updateTableFields(base, req.body, function(err, result){
       res.redirect("/admin/lists/" + req.params.name ); 

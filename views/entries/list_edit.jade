@@ -1,11 +1,11 @@
-extends main_layout
+extends ../main_layout
 
 block append head
   title Harp Editor - Edit
 
 block body
-  include _shared/nav
-  include _shared/content_nav
+  include ../_shared/nav
+  include ../_shared/content_nav
 
   .container(style="margin-top:15px;")
     .row.hb-status-bar
@@ -14,7 +14,7 @@ block body
         b= list
 
     .row
-      form(action="/admin/lists/#{list}/edit/table", method="post")
+      form(action="/admin/entries/#{list}/edit/table", method="post")
         h2 Table Options
 
         -for (var i = 0; i < fields.length; i++)
@@ -29,34 +29,36 @@ block body
 
         button.btn.btn-primary Save Table Columns
           
-    .row
-      h2 Field Options
-      form.form-inline(role='form')
-        -for (var i = 0; i < fields.length; i++)
-          -if (Object.keys(fields[i]) != "content")
-            .clearfix
-              .form-group
-                label.sr-only #{fields[i].name}
-                input#exampleInputEmail2.form-control(type='email', placeholder='#{fields[i].name}')
-              .form-group
-                label.sr-only Type
-                select.form-control
-                  option Text
-                  option Textarea
-                  option Date
+    //- .row
+    //-   h2 Field Options
+    //-   form.form-inline(role='form')
+    //-     -for (var i = 0; i < fields.length; i++)
+    //-       -if (Object.keys(fields[i]) != "content")
+    //-         .clearfix
+    //-           .form-group
+    //-             label.sr-only #{fields[i].name}
+    //-             input#exampleInputEmail2.form-control(type='email', placeholder='#{fields[i].name}')
+    //-           .form-group
+    //-             label.sr-only Type
+    //-             select.form-control
+    //-               option Text
+    //-               option Textarea
+    //-               option Date
                 
-              .checkbox
-                label
-                  input(type='checkbox')
-                  | Required
-        button.btn.btn-primary(type='submit') Save Data Types
+    //-           .checkbox
+    //-             label
+    //-               input(type='checkbox')
+    //-               | Required
+    //-     button.btn.btn-primary(type='submit') Save Data Types
 
-        .row
-          h2 Content
+    .row
+      form(action="/admin/entries/#{list}/edit/content", method="post")      
+        h2 Content
+        .form-group
+          label Content Area
+          select.form-control(name="content")
+            option(value="true") Include Content window
+            option(value="false") No Content window
+            option(value="template") Clone from template
 
-          .form-group
-            label Content Area
-            select.form-control
-              option Include Content window
-              option No Content window
-              option Clone from template
+        button.btn.btn-primary Save Table Columns            
