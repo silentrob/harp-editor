@@ -55,10 +55,13 @@ block body
       form(action="/admin/entries/#{list}/edit/content", method="post")      
         h2 Content
         .form-group
-          label Content Area
+          label Content Area #{editorData.content}
           select.form-control(name="content")
-            option(value="true") Include Content window
-            option(value="false") No Content window
-            option(value="template") Clone from template
+
+            each content, key in contentSelect
+              - if (editorData.content == content.value)
+                option(value="#{content.value}", selected='selected')= content.name
+              - else
+                option(value="#{content.value}")= content.name
 
         button.btn.btn-primary Save Table Columns            

@@ -18,7 +18,6 @@ before(function(done){
 
 describe('sections', function(){
   
-
   // Returns the sections with all files as an object
   describe('#fetchSection()', function(){
   	it('editor.sections should have function', function(){
@@ -35,7 +34,6 @@ describe('sections', function(){
 	 	});
   });
 
-
   // Returns the sections available as an array, some filtering is done to clean up the list.
   // This method looks at the _data.json for each section to make a more susinct list.
   describe('#fetchSectionsRefined()', function(){
@@ -45,14 +43,41 @@ describe('sections', function(){
 
   	it('editor.sections.fetchSectionsRefined() should fetch sections', function(done){
 	  	editor.sections.fetchSectionsRefined(function(result) {
-	  		console.log(result)
 	  		// [root, blog, authors]
 	  		result.should.have.length(3)
 	  		result.should.be.an.Array
 	  		done();
 	  	});
 	 	});
+  });
+
+  describe('#fetchMetaDataBySection()', function(){
+  	it('editor.sections should have function', function(){
+	  	editor.sections.should.have.property("fetchMetaDataBySection");
+	 	});
+
+  	it('editor.sections.fetchMetaDataBySection() should fetch sections', function(done){
+	  	editor.sections.fetchMetaDataBySection('authors', function(result) {
+	  		result.should.be.an.Object;
+	  		done();
+	  	});
+	 	});
   });  
+  
+  describe('#fetchFilesBySection()', function(){
+  	it('editor.sections should have function', function(){
+	  	editor.sections.should.have.property("fetchFilesBySection");
+	 	});
+
+  	it('editor.sections.fetchFilesBySection() should fetch sections', function(done){
+	  	editor.sections.fetchFilesBySection('authors', function(err, result) {
+	  		should.not.exist(err);
+	  		result.should.have.length(5);
+	  		result.should.be.an.Array;
+	  		done();
+	  	});
+	 	});
+  });
 
 });
 

@@ -28,7 +28,7 @@ describe('files', function(){
   });
 
   describe('#fetch()', function(){
-  	it('editor.metadata.fetch() should fetch files', function(done){
+  	it('editor.files.fetch() should fetch files', function(done){
 	  	editor.files.fetch(function(files){
 	  		files.should.be.an.Array;
 	  		files.should.have.length(30);

@@ -58,6 +58,7 @@ block body
                 input.js-content-hidden(type="hidden" name="content", value="")
                 .editable.
           - else if(fields[i].content)
+            input(type="hidden" name="clone", value="#{fields[i].content}")
             showContent = false
 
 
@@ -71,16 +72,17 @@ block body
 
       button.btn.btn-primary.pull-right Save 
 
-    script.
-      $(function() {
-        var editor = new MediumEditor('.editable');
-        $(".js-form").submit(function( event ) {
-          event.preventDefault();
+    -if (showContent == true)
+      script.
+        $(function() {
+          var editor = new MediumEditor('.editable');
+          $(".js-form").submit(function( event ) {
+            event.preventDefault();
 
-          var contentObj = editor.serialize();
-          console.log(contentObj)
-          $(".js-content-hidden").val(contentObj['element-0'].value);
-          this.submit();
-          
+            var contentObj = editor.serialize();
+            console.log(contentObj)
+            $(".js-content-hidden").val(contentObj['element-0'].value);
+            this.submit();
+            
+          });
         });
-      });

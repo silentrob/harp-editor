@@ -18,7 +18,7 @@ var auth          = require("./routes/auth")(editor);
 var members       = require("./routes/members")(editor);
 var settings      = require("./routes/settings")(editor);
 var pages         = require("./routes/pages")(editor, config);
-var entries       = require("./routes/entries")(editor);
+var entries       = require("./routes/entries")(editor, config);
 
 app.configure(function () {
   app.use(express.cookieParser('play me off keyboard cat'));
@@ -62,34 +62,35 @@ app.get("/admin/entry/new", checkAuth, entries.new);
 app.post("/admin/entry/new", checkAuth, entries.create);
 
 
-// List section editor
 // This is for editing the editor Metadata
 // TODO should be ADMIN only
 app.get("/admin/entries/:name/edit", checkAuth, function(req, res) {
   editor.sections.fetchSectionsRefined(function(sections) {
     editor.sections.fetchMetaDataBySection(req.params.name, function(metaData, root) {
-      
       var fields = editor.metadata.fetchFields(metaData);
+      var editorData = (metaData.editor) ? metaData.editor : {};
       var table = (metaData.editor && metaData.editor.table) ? metaData.editor.table : [];
-    
-      res.render("entries/list_edit", {nav:'content', table:table,  fields: fields, list: req.params.name, sections: sections});  
-      
+
+      editor.sections.fetchFilesBySection(req.params.name, function(err, files){
+        var contentSelect = editor.metadata.contentForSelect(files);
+        res.render("entries/list_edit", {nav:'content', contentSelect:contentSelect, table:table, editorData: editorData, fields: fields, list: req.params.name, sections: sections});  
+      });
+
     });
   });
 });
 
 app.post("/admin/entries/:name/edit/table", checkAuth, function(req, res) { 
   editor.sections.sectionToBase(req.params.name, function(base) {
-    editor.metadata.updateTableFields(base, req.body, function(err, result){
+    editor.metadata.updateTableField(base, req.body, function(err, result){
       res.redirect("/admin/lists/" + req.params.name ); 
     });
   });
 });
 
 app.post("/admin/entries/:name/edit/content", checkAuth, function(req, res) { 
-
   editor.sections.sectionToBase(req.params.name, function(base) {
-    editor.metadata.updateTableFields(base, req.body, function(err, result){
+    editor.metadata.updateContentField(base, req.body, function(err, result){
       res.redirect("/admin/lists/" + req.params.name ); 
     });
   });
