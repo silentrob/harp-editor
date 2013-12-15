@@ -30,8 +30,8 @@ Run tests - Edit /test/config.json
 ## Roadmap
 
 ### MVP TODOS aka current issues
+- Edit Entries
 - Add CLI to init (replace config.boilerplate with CLI args)
-- Entry Editor needs to support content
 - Member needs `admin`
 
 ### MDP TODOS

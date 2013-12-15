@@ -37,7 +37,7 @@ block body
                   -for (var i = 0; i < metaData['editor'].table.length; i++)
                     - var column = metaData['editor'].table[i];
                     if (i == 0)
-                      td: a(href="/admin/publish?path=")= obj[column]
+                      td: a(href="#")= obj[column]
                     else
                       td= obj[column]
                   td
@@ -53,7 +53,8 @@ block body
             each obj, dataKey in metaData
               if (obj.type != "page" && dataKey != "editor")
                 tr
-                  td: a(href="/admin/publish?path=/blog/#{dataKey}.md")= listTitle(dataKey, obj)
+                  //- td: a(href="/admin/publish?path=/blog/#{dataKey}.md")= listTitle(dataKey, obj)
+                  td: a(href="#")= listTitle(dataKey, obj)
                   td
                     a(href="#{listRoot}/#{link(dataKey)}") 
                       i.glyphicon.glyphicon-link.glyphicon-fw.hb-muted

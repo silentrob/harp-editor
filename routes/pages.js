@@ -72,11 +72,12 @@ module.exports = function(editor, config) {
 		  if (ext == "md") {
 		    content = toMarkdown(req.body.content);
 		  } else {
-		    contents = req.body.content;
+		    content = req.body.content;
 		  }
 
 		  editor.metadata.updateMetaData(req.body.slug, base, data, function(err, result){
 		    editor.files.writeFileBySlug(req.body.slug, base, ext, content, function(fileContents) {
+
 		      var existingSlug = editor.utils.normaizeFilePart(req.body.file);
 		      // If the slug has changed, we need to rename the file.
 		      if(req.body.slug !== existingSlug) {
